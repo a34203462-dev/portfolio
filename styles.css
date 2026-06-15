@@ -1,0 +1,457 @@
+/* Design tokens — Figma hero 110:401 */
+:root {
+  --color-bg: #f5f5f7;
+  --color-text: #363636;
+  --color-lead: #909090;
+  --color-time-muted: #b5b5b5;
+  --color-greeting: #2f80ed;
+  --color-white: #ffffff;
+  --container: 1280px;
+  --nav-pad-x: 100px;
+  --nav-pad-t: 30px;
+  --content-pad-x: 100px;
+  --font-headline: "Oswald", sans-serif;
+  --font-body: "Geist", system-ui, sans-serif;
+  --reveal-duration: 0.65s;
+  --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --reveal-shift: 28px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: var(--color-bg);
+}
+
+/* Full-viewport background layer — pattern from node 115:426 */
+.hero__bg {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero__bg-inner {
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+  background-image: url("assets/bg-pattern.png");
+  background-repeat: repeat-y;
+  background-position: center top;
+  background-size: 1280px auto;
+}
+
+/* Navigation — Geist Medium 18 */
+.nav {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--nav-pad-t) var(--nav-pad-x) 0;
+}
+
+.nav__brand,
+.nav__link {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 18px;
+  line-height: normal;
+  color: var(--color-text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.nav__brand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 10px 10px 0;
+}
+
+.nav__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav__link {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.nav__link:last-child {
+  padding-left: 10px;
+}
+
+/* Location / time pill — Figma 141:161 */
+.nav__location {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 180px;
+  padding: 16px;
+  border-radius: 20px 20px 5px 20px;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.02);
+}
+
+.nav__location-main {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav__location-dot {
+  display: flex;
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+}
+
+.nav__location-dot img {
+  width: 9px;
+  height: 9px;
+  display: block;
+}
+
+.nav__location-city {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: normal;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.nav__location-time {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: normal;
+  color: var(--color-time-muted);
+  white-space: nowrap;
+}
+
+/* Hero photo — frame 111:409 */
+.hero__image-block {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 471px;
+  max-width: calc(100% - 40px);
+  height: 282px;
+  margin: 6px auto 0;
+  padding-top: 60px;
+  box-sizing: border-box;
+}
+
+.hero__image-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero__image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center top;
+}
+
+/* Привет — #2f80ed, corners 20 / 20 / 5 / 20 */
+.hero__greeting {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  padding: 8px 18px;
+  border-radius: 20px 20px 5px 20px;
+  background: var(--color-greeting);
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.hero__greeting:hover {
+  animation: hero-greeting-shake 0.32s ease-in-out;
+}
+
+@keyframes hero-greeting-shake {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(2px, -1px);
+  }
+  50% {
+    transform: translate(-2px, 1px);
+  }
+  75% {
+    transform: translate(1px, 1px);
+  }
+}
+
+.hero__greeting-text {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: var(--color-white);
+  white-space: nowrap;
+}
+
+.hero__greeting-word {
+  font-size: 16px;
+  line-height: normal;
+}
+
+.hero__greeting-bang {
+  font-size: 14px;
+  line-height: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__greeting:hover {
+    animation: none;
+  }
+}
+
+/* Main — centered title stack, 96px / −1.44px */
+.hero__main {
+  position: relative;
+  z-index: 2;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 24px var(--content-pad-x) 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.hero__titles {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: center;
+  width: 100%;
+  text-align: center;
+}
+
+.hero__title {
+  margin: 0;
+  font-family: var(--font-headline);
+  font-weight: 500;
+  font-size: 96px;
+  line-height: 1;
+  letter-spacing: -1.44px;
+  color: var(--color-text);
+  text-align: center;
+}
+
+.hero__title--muted {
+  opacity: 0.6;
+}
+
+.hero__title--multiline {
+  max-width: min(100%, 1100px);
+}
+
+.hero__title-part {
+  font: inherit;
+  color: inherit;
+}
+
+.hero__title-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 90px;
+}
+
+.hero__title-row--bottom {
+  align-items: flex-end;
+}
+
+.hero__title--nowrap {
+  white-space: nowrap;
+}
+
+.hero__title-icon {
+  flex-shrink: 0;
+  mix-blend-mode: darken;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero__title-icon--left {
+  width: 90px;
+  height: 90px;
+}
+
+.hero__title-icon--left img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.hero__title-icon--right {
+  width: 115px;
+  height: 89px;
+}
+
+.hero__title-icon--right img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.hero__lead {
+  margin: 0;
+  max-width: 421px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 18px;
+  line-height: normal;
+  color: var(--color-lead);
+  text-align: center;
+}
+
+/* Scroll reveal — once */
+.js-reveal {
+  opacity: 0;
+  transform: translateY(var(--reveal-shift));
+  transition:
+    opacity var(--reveal-duration) var(--reveal-ease),
+    transform var(--reveal-duration) var(--reveal-ease);
+}
+
+.js-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* --- Mobile --- */
+@media (max-width: 900px) {
+  :root {
+    --nav-pad-x: 24px;
+    --content-pad-x: 24px;
+    --reveal-shift: 20px;
+  }
+
+  .nav {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .nav__right {
+    align-items: flex-end;
+    width: 100%;
+  }
+
+  .nav__links {
+    gap: 8px;
+  }
+
+  .nav__brand,
+  .nav__link {
+    font-size: 16px;
+  }
+
+  .nav__location {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .hero__image-block {
+    width: 100%;
+    height: auto;
+    min-height: 260px;
+    padding-top: 40px;
+    margin-top: 8px;
+  }
+
+  .hero__title {
+    font-size: clamp(36px, 10vw, 96px);
+    letter-spacing: -0.02em;
+  }
+
+  .hero__title-row {
+    min-height: auto;
+    flex-wrap: wrap;
+  }
+
+  .hero__title-icon--left {
+    width: clamp(56px, 20vw, 90px);
+    height: clamp(56px, 20vw, 90px);
+  }
+
+  .hero__title-icon--right {
+    width: clamp(72px, 22vw, 115px);
+    height: clamp(56px, 18vw, 89px);
+  }
+
+  .hero__main {
+    padding-top: 28px;
+    gap: 28px;
+  }
+}
+
+@media (max-width: 520px) {
+  .nav__brand {
+    padding: 8px 8px 8px 0;
+  }
+
+  .hero__greeting {
+    padding: 6px 14px;
+  }
+
+  .nav__location {
+    padding: 12px 14px;
+  }
+}

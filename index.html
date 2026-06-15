@@ -1,0 +1,1991 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Моё портфолио</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:wght@400;500&family=Noto+Serif:ital,wdth,wght@0,62.5,500;1,62.5,500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --color-bg: #ffffff;
+        --color-text: #363636;
+        --color-text-dark: #1d1d1d;
+        --color-lead: #909090;
+        --color-section-title: #8f8f8f;
+        --color-time-muted: #b5b5b5;
+        --color-greeting: #2f80ed;
+        --color-greeting-border: #1466d4;
+        --color-greeting-highlight: #5ba1ff;
+        --color-white: #ffffff;
+        --color-status-dot: #c6f135;
+        --color-btn-border: #eae9e9;
+        --color-btn-bg: #f9f9f9;
+        --color-btn-hover: #2f80ed;
+        --color-btn-hover-border: #1466d4;
+        --color-btn-hover-highlight: #5ba1ff;
+        --color-title-muted: #868686;
+        --container: 1280px;
+        --nav-pad-x: 100px;
+        --header-offset: 80px;
+        --font-headline: "Noto Serif", serif;
+        --font-body: "Google Sans Code", monospace;
+        --reveal-duration: 0.65s;
+        --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+        --reveal-shift: 28px;
+        --bg-pattern-width: 1700px;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--color-bg);
+        color: var(--color-text);
+        font-family: var(--font-body);
+      }
+
+      .page {
+        position: relative;
+        z-index: 1;
+        padding-top: var(--header-offset);
+      }
+
+      .page__bg {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .page__bg-inner {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: var(--bg-pattern-width);
+        max-width: 100vw;
+        margin-left: calc(var(--bg-pattern-width) / -2);
+        height: 100%;
+        min-height: 100%;
+        opacity: 0.6;
+        background-image: url("assets/bg-pattern.png");
+        background-repeat: repeat-y;
+        background-position: center top;
+        background-size: var(--bg-pattern-width) auto;
+      }
+
+      .page__content {
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Fixed header */
+      .nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        max-width: var(--container);
+        margin: 0 auto;
+        padding: 30px var(--nav-pad-x) 0;
+        background: transparent;
+        transition: transform 0.35s var(--reveal-ease);
+      }
+
+      .nav.is-hidden {
+        transform: translateY(calc(-100% - 8px));
+      }
+
+      .nav__links {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      /* Buttons — 441:1653 / 441:1664 / 441:3392 / 441:3604 */
+      .btn {
+        display: inline-flex;
+        flex-direction: column;
+        height: 50px;
+        border: 0.5px solid var(--color-btn-border);
+        border-radius: 18px;
+        padding: 0;
+        margin: 0;
+        background: none;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+        transition: border-color 0.2s ease;
+        flex-shrink: 0;
+        font: inherit;
+      }
+
+      .btn--sm {
+        height: 40px;
+      }
+
+      .btn__inner {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        height: 100%;
+        padding: 0 16px;
+        border-radius: 18px;
+        background: var(--color-btn-bg);
+        border-left: 1px solid var(--color-white);
+        border-top: 1px solid var(--color-white);
+        transition:
+          background 0.2s ease,
+          border-color 0.2s ease,
+          color 0.2s ease;
+      }
+
+      .btn--brand {
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        border: 0.5px solid var(--color-btn-border);
+      }
+
+      .btn--brand .btn__inner {
+        padding: 0 18px;
+      }
+
+      .btn--brand:hover,
+      .btn--brand:focus-visible {
+        border-color: var(--color-btn-border);
+      }
+
+      .btn--brand:hover .btn__inner,
+      .btn--brand:focus-visible .btn__inner {
+        background: var(--color-btn-bg);
+        border-left-color: var(--color-white);
+        border-top-color: var(--color-white);
+      }
+
+      .btn--brand:hover .btn__text,
+      .btn--brand:focus-visible .btn__text {
+        color: var(--color-text);
+      }
+
+      .btn__text {
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: 17px;
+        letter-spacing: -0.51px;
+        line-height: normal;
+        color: var(--color-text);
+        white-space: nowrap;
+        transition: color 0.2s ease;
+      }
+
+      .btn__sep {
+        width: 0;
+        height: 16px;
+        border-left: 1px solid #d4d4d4;
+        flex-shrink: 0;
+        transition: border-color 0.2s ease;
+      }
+
+      .btn__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        color: #808080;
+        transition: color 0.2s ease;
+      }
+
+      .btn__icon svg {
+        display: block;
+      }
+
+      .btn--icon .btn__inner {
+        width: 44px;
+        padding: 0;
+        justify-content: center;
+      }
+
+      .btn--icon.btn--sm .btn__inner {
+        width: 45.2px;
+      }
+
+      .btn:hover,
+      .btn:focus-visible {
+        border-color: var(--color-btn-hover-border);
+        outline: none;
+      }
+
+      .btn:hover .btn__inner,
+      .btn:focus-visible .btn__inner {
+        background: var(--color-btn-hover);
+        border-left-color: var(--color-btn-hover-highlight);
+        border-top-color: var(--color-btn-hover-highlight);
+      }
+
+      .btn:hover .btn__text,
+      .btn:focus-visible .btn__text {
+        color: var(--color-white);
+      }
+
+      .btn:hover .btn__sep,
+      .btn:focus-visible .btn__sep {
+        border-left-color: rgba(255, 255, 255, 0.45);
+      }
+
+      .btn:hover .btn__icon,
+      .btn:focus-visible .btn__icon {
+        color: var(--color-white);
+      }
+
+      /* Hero — 441:1544 */
+      .hero {
+        position: relative;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 45px;
+        padding: 119px var(--nav-pad-x) 150px;
+      }
+
+      .hero__reveal {
+        width: 100%;
+      }
+
+      .hero__inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 45px;
+        width: 100%;
+      }
+
+      .js-scroll-parallax {
+        transform-origin: center top;
+        will-change: transform;
+      }
+
+      .about__title .js-scroll-parallax {
+        display: block;
+      }
+
+      .about__section > .js-scroll-parallax {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 70px;
+        width: 100%;
+      }
+
+      .about__section--compact > .js-scroll-parallax {
+        gap: 40px;
+      }
+
+      .hero__image-block {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        flex-shrink: 0;
+        width: 403px;
+        max-width: calc(100% - 40px);
+        height: 198px;
+        padding-top: 12px;
+      }
+
+      .hero__image-wrap {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .hero__image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center top;
+      }
+
+      .hero__greeting {
+        position: relative;
+        z-index: 1;
+        display: inline-flex;
+        flex-direction: column;
+        align-items: flex-start;
+        align-self: flex-start;
+        width: fit-content;
+        max-width: 100%;
+        flex-shrink: 0;
+        border: 0.5px solid var(--color-greeting-border);
+        border-radius: 20px 20px 5px 20px;
+        cursor: default;
+      }
+
+      .hero__greeting-inner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 35px;
+        padding: 8px 12px;
+        border-radius: 20px 20px 5px 20px;
+        background: var(--color-greeting);
+        border-left: 1px solid var(--color-greeting-highlight);
+        border-top: 1px solid var(--color-greeting-highlight);
+        box-shadow: 0 4px 2px rgba(0, 0, 0, 0.02);
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: 15px;
+        line-height: normal;
+        color: var(--color-white);
+        white-space: nowrap;
+      }
+
+      .hero__main {
+        width: 100%;
+        max-width: var(--container);
+        display: flex;
+        justify-content: center;
+        padding: 0 var(--nav-pad-x);
+      }
+
+      .hero__titles {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        align-items: center;
+        width: min(100%, 650px);
+        text-align: center;
+      }
+
+      .hero__title {
+        margin: 0;
+        font-family: var(--font-headline);
+        font-stretch: extra-condensed;
+        font-weight: 500;
+        font-size: 58px;
+        line-height: 1;
+        letter-spacing: -2.9px;
+        color: var(--color-text);
+        text-align: center;
+      }
+
+      .hero__title--italic {
+        font-style: italic;
+      }
+
+      .hero__title--regular {
+        font-style: normal;
+      }
+
+      .hero__title--muted {
+        color: var(--color-title-muted);
+        font-style: normal;
+      }
+
+      .hero__title-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        min-height: 55px;
+      }
+
+      .hero__title-icon {
+        position: relative;
+        flex-shrink: 0;
+        width: 63px;
+        height: 63px;
+        mix-blend-mode: darken;
+        overflow: hidden;
+      }
+
+      .hero__title-icon img {
+        position: absolute;
+        width: 100%;
+        height: 83.75%;
+        left: 0.12%;
+        top: 6.13%;
+        max-width: none;
+        object-fit: contain;
+      }
+
+      .hero__title-multiline {
+        margin: 0;
+        text-align: center;
+        white-space: normal;
+      }
+
+      .hero__title-multiline .hero__title {
+        display: inline;
+      }
+
+      /* Cases — 441:1571 */
+      .cases {
+        max-width: var(--container);
+        margin: 0 auto;
+        padding: 0 var(--nav-pad-x) 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 69px;
+      }
+
+      .case {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+      }
+
+      .case__link {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+        transition: transform 0.4s var(--reveal-ease);
+      }
+
+      .case__link:hover,
+      .case__link:focus-visible {
+        transform: translateY(-10px);
+      }
+
+      .case__link:hover .btn--icon .btn__inner,
+      .case__link:focus-visible .btn--icon .btn__inner {
+        background: var(--color-btn-hover);
+        border-left-color: var(--color-btn-hover-highlight);
+        border-top-color: var(--color-btn-hover-highlight);
+      }
+
+      .case__link:hover .btn--icon,
+      .case__link:focus-visible .btn--icon {
+        border-color: var(--color-btn-hover-border);
+      }
+
+      .case__link:hover .btn--icon .btn__icon,
+      .case__link:focus-visible .btn--icon .btn__icon {
+        color: var(--color-white);
+      }
+
+      .case__frame {
+        position: relative;
+        width: 100%;
+        height: 600px;
+        border-radius: 34px;
+        overflow: hidden;
+      }
+
+      .case__frame--dark {
+        background: #2b2b2b;
+      }
+
+      .case__frame-bg {
+        position: absolute;
+        inset: 0;
+        border-radius: 34px;
+        overflow: hidden;
+      }
+
+      .case__frame-bg img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .case__frame-bg::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 34px;
+        background: radial-gradient(ellipse at center, #ebe9ff 0%, #f2f1f7 100%);
+        pointer-events: none;
+      }
+
+      .case__phones {
+        position: absolute;
+        inset: 0;
+      }
+
+      .case__phone {
+        position: absolute;
+        pointer-events: auto;
+        transition: transform 0.45s var(--reveal-ease);
+        transform-origin: center center;
+        z-index: 1;
+      }
+
+      .case__phone:hover {
+        z-index: 3;
+      }
+
+      .case__phone--1:hover {
+        transform: scale(1.06);
+      }
+
+      .case__phone--3:hover {
+        transform: scale(1.06);
+      }
+
+      .case__phone--1 {
+        left: 11.48%;
+        top: 32.83%;
+        width: 23.7%;
+        height: 87.5%;
+      }
+
+      .case__phone--2 {
+        left: 50%;
+        top: 50%;
+        width: 23.7%;
+        height: 87.5%;
+        transform: translate(-50%, -50%);
+      }
+
+      .case__phone--2:hover {
+        transform: translate(-50%, -50%) scale(1.06);
+      }
+
+      .case__phone--3 {
+        left: 64.81%;
+        top: -40.5%;
+        width: 23.7%;
+        height: 87.5%;
+      }
+
+      .case__phone--dark-1 {
+        left: 50%;
+        top: 50%;
+        width: 23.7%;
+        height: 87.5%;
+        transform: translate(-50%, -50%);
+      }
+
+      .case__phone--dark-1:hover {
+        transform: translate(-50%, -50%) scale(1.06);
+      }
+
+      .case__phone--dark-2 {
+        left: calc(50% + 26.57%);
+        top: calc(50% + 26.58%);
+        width: 23.7%;
+        height: 87.5%;
+        transform: translate(-50%, -50%);
+      }
+
+      .case__phone--dark-2:hover {
+        transform: translate(-50%, -50%) scale(1.06);
+      }
+
+      .case__phone--dark-3 {
+        left: calc(50% - 26.58%);
+        top: calc(50% + 19.75%);
+        width: 23.7%;
+        height: 87.5%;
+        transform: translate(-50%, -50%);
+      }
+
+      .case__phone--dark-3:hover {
+        transform: translate(-50%, -50%) scale(1.06);
+      }
+
+      .case__phone img,
+      .case__phone-crop img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .case__phone-crop {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+
+      .case__phone-crop--a img {
+        position: absolute;
+        width: 299.47%;
+        height: 127.69%;
+        left: -140%;
+        top: -13.85%;
+        max-width: none;
+        object-fit: cover;
+      }
+
+      .case__phone-crop--b img,
+      .case__phone-crop--c img {
+        position: absolute;
+        width: 380.38%;
+        height: 139.06%;
+        left: -140%;
+        top: -19.41%;
+        max-width: none;
+        object-fit: cover;
+      }
+
+      .case__tags {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        z-index: 2;
+      }
+
+      .case__tags--right {
+        left: auto;
+        right: 20px;
+      }
+
+      .tag {
+        display: inline-flex;
+        height: 44px;
+        border: 0.5px solid var(--color-btn-border);
+        border-radius: 18px;
+        overflow: hidden;
+      }
+
+      .tag--dark {
+        border-color: #222222;
+      }
+
+      .tag__inner {
+        display: flex;
+        align-items: center;
+        height: 44px;
+        padding: 0 16px;
+        border-radius: 18px;
+        background: var(--color-btn-bg);
+        border-left: 1px solid var(--color-white);
+        border-top: 1px solid var(--color-white);
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: 17px;
+        letter-spacing: -0.51px;
+        color: #808080;
+        white-space: nowrap;
+      }
+
+      .tag--dark .tag__inner {
+        background: #313131;
+        border-left-color: #3b3b3b;
+        border-top-color: #3b3b3b;
+        color: #9f9f9f;
+      }
+
+      .case__footer {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        width: 100%;
+      }
+
+      .case__caption {
+        margin: 0;
+        text-align: left;
+        align-self: flex-start;
+        flex: 1;
+        min-width: 0;
+      }
+
+      .case__caption-line {
+        margin: 0;
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: 20px;
+        line-height: normal;
+        letter-spacing: -0.48px;
+        text-transform: uppercase;
+        white-space: pre-wrap;
+      }
+
+      .case--half .case__caption-line {
+        letter-spacing: -0.6px;
+      }
+
+      .case__caption--muted {
+        color: rgba(54, 54, 54, 0.5);
+      }
+
+      .case__caption--gray {
+        color: #969696;
+      }
+
+      .case__row {
+        display: flex;
+        gap: 40px;
+        width: 100%;
+      }
+
+      .case--half {
+        width: 527px;
+        max-width: 100%;
+        flex: 1 1 527px;
+        align-items: flex-start;
+      }
+
+      .case--half .case__caption {
+        max-width: 522px;
+      }
+
+      .case__cover {
+        width: 100%;
+        height: 360px;
+        border-radius: 34px;
+        overflow: hidden;
+      }
+
+      .case__cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        border-radius: 34px;
+      }
+
+      /* Еще немного обо мне — 441:1525 */
+      .about {
+        max-width: var(--container);
+        margin: 0 auto;
+        padding: 180px var(--nav-pad-x) 100px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 60px;
+      }
+
+      .about__title {
+        margin: 0;
+        font-family: var(--font-headline);
+        font-stretch: extra-condensed;
+        font-style: italic;
+        font-weight: 500;
+        font-size: 58px;
+        line-height: 1;
+        letter-spacing: -2.9px;
+        color: var(--color-text);
+        text-align: center;
+        white-space: nowrap;
+      }
+
+      .about__sections {
+        display: flex;
+        flex-direction: column;
+        gap: 130px;
+        width: 100%;
+        align-items: center;
+      }
+
+      .about__section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 70px;
+        width: 100%;
+      }
+
+      .about__section--compact {
+        gap: 40px;
+      }
+
+      .about__text {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        max-width: 415px;
+        text-align: center;
+      }
+
+      .about__text-primary {
+        margin: 0;
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: 20px;
+        line-height: normal;
+        color: var(--color-text);
+        max-width: 342px;
+        text-transform: uppercase;
+      }
+
+      .about__text-secondary {
+        margin: 0;
+        font-family: var(--font-body);
+        font-weight: 400;
+        font-size: 16px;
+        line-height: normal;
+        color: #888888;
+      }
+
+      .about__cards {
+        position: relative;
+        max-width: 100%;
+      }
+
+      .about__cards--tarot {
+        width: 452px;
+        height: 433px;
+      }
+
+      .about__cards--art {
+        width: 453px;
+        height: 285px;
+      }
+
+      .about__card {
+        position: absolute;
+        width: 182px;
+        height: 305px;
+        border-radius: 35px;
+        overflow: hidden;
+        box-shadow: 0 4px 11.7px rgba(0, 0, 0, 0.25);
+        transition: transform 0.35s var(--reveal-ease), box-shadow 0.35s var(--reveal-ease);
+        transform-origin: center center;
+      }
+
+      .about__card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        border-radius: 35px;
+      }
+
+      .about__card--tarot-back {
+        left: 63px;
+        top: 0;
+        z-index: 1;
+        transform: rotate(-13.86deg);
+      }
+
+      .about__card--tarot-front {
+        left: 188px;
+        top: 88px;
+        z-index: 2;
+        transform: rotate(17.32deg);
+      }
+
+      .about__card--tarot-back:hover,
+      .about__card--tarot-front:hover {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+      }
+
+      .about__card--tarot-back:hover {
+        z-index: 3;
+        transform: rotate(-13.86deg) scale(1.06);
+      }
+
+      .about__card--tarot-front:hover {
+        z-index: 3;
+        transform: rotate(17.32deg) scale(1.06);
+      }
+
+      .about__card--art-photo {
+        left: 28px;
+        top: 25px;
+        width: 182px;
+        height: 223px;
+        z-index: 1;
+        transform: rotate(-13.86deg);
+      }
+
+      .about__card--art-sketch {
+        left: 220px;
+        top: -9px;
+        width: 182px;
+        height: 200px;
+        z-index: 2;
+        transform: rotate(17.32deg);
+      }
+
+      .about__card--art-sketch .about__card-crop {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border-radius: 35px;
+      }
+
+      .about__card--art-sketch .about__card-crop img {
+        position: absolute;
+        width: 185.46%;
+        height: 163.53%;
+        left: -14.97%;
+        top: -18.74%;
+        max-width: none;
+        border-radius: 0;
+      }
+
+      .about__card--art-photo:hover,
+      .about__card--art-sketch:hover {
+        z-index: 3;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+      }
+
+      .about__card--art-photo:hover {
+        transform: rotate(-13.86deg) scale(1.06);
+      }
+
+      .about__card--art-sketch:hover {
+        transform: rotate(17.32deg) scale(1.06);
+      }
+
+      .about__badge {
+        position: absolute;
+        left: 0;
+        top: 232px;
+        z-index: 10;
+        padding: 8px 18px;
+        border-radius: 20px 18px 5px 20px;
+        background: var(--color-greeting);
+        font-family: var(--font-body);
+        font-size: 14px;
+        font-weight: 400;
+        line-height: normal;
+        color: var(--color-white);
+        white-space: nowrap;
+        pointer-events: none;
+      }
+
+      /* Футер — 441:1605 */
+      .footer {
+        max-width: var(--container);
+        margin: 0 auto;
+        padding: 120px var(--nav-pad-x);
+        display: flex;
+        flex-direction: column;
+        gap: 97px;
+      }
+
+      .footer__title-wrap {
+        width: 100%;
+      }
+
+      .footer__title {
+        margin: 0;
+        font-family: var(--font-headline);
+        font-stretch: extra-condensed;
+        font-style: italic;
+        font-weight: 500;
+        font-size: clamp(72px, 14vw, 180px);
+        line-height: 1;
+        letter-spacing: -0.05em;
+        background: linear-gradient(180deg, #363636 0%, #5e5c5c 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        width: 100%;
+      }
+
+      .footer__bar {
+        width: 100%;
+      }
+
+      .footer__bar-inner {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 38px;
+        width: 100%;
+      }
+
+      .footer__info {
+        display: flex;
+        flex: 1 1 auto;
+        gap: 75px;
+        align-items: flex-start;
+        min-width: 0;
+      }
+
+      .footer__col {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+      }
+
+      .footer__name,
+      .footer__email {
+        margin: 0;
+        font-family: var(--font-body);
+        font-weight: 400;
+        font-size: 28px;
+        line-height: 1;
+        letter-spacing: -0.05em;
+        color: var(--color-text);
+      }
+
+      .footer__name {
+        text-transform: uppercase;
+      }
+
+      .footer__email {
+        border: none;
+        background: none;
+        padding: 0;
+        cursor: pointer;
+        text-align: left;
+      }
+
+      .footer__meta {
+        margin: 0;
+        font-family: var(--font-body);
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 1;
+        letter-spacing: -0.05em;
+        color: #9b9b9b;
+      }
+
+      .footer__meta--email {
+        text-transform: lowercase;
+      }
+
+      .footer__copy-note {
+        margin: 0;
+        font-family: var(--font-body);
+        font-size: 14px;
+        line-height: 1;
+        color: var(--color-greeting);
+        opacity: 0;
+        transition: opacity 0.25s ease;
+      }
+
+      .footer__copy-note.is-visible {
+        opacity: 1;
+      }
+
+      .footer__links {
+        flex: 0 0 371px;
+        max-width: 100%;
+        justify-content: flex-end;
+      }
+
+      /* Scroll reveal */
+      .js-reveal {
+        opacity: 0;
+        transform: translateY(var(--reveal-shift));
+        transition:
+          opacity var(--reveal-duration) var(--reveal-ease),
+          transform var(--reveal-duration) var(--reveal-ease);
+      }
+
+      .js-reveal.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .js-reveal {
+          opacity: 1;
+          transform: none;
+          transition: none;
+        }
+
+        .js-scroll-parallax {
+          transform: none !important;
+        }
+
+        .case__link {
+          transition: none;
+        }
+
+        .case__link:hover,
+        .case__link:focus-visible {
+          transform: none;
+        }
+
+        .case__phone {
+          transition: none;
+        }
+
+        .case__phone:hover {
+          transform: none;
+        }
+
+        .case__phone--2:hover,
+        .case__phone--dark-1:hover,
+        .case__phone--dark-2:hover,
+        .case__phone--dark-3:hover {
+          transform: translate(-50%, -50%);
+        }
+      }
+
+      @media (max-width: 1100px) {
+        .case__row {
+          flex-wrap: wrap;
+        }
+
+        .case--half {
+          flex-basis: 100%;
+        }
+      }
+
+      /* Mobile stub — Figma 545:257 */
+      .mobile-stub {
+        display: none;
+        position: relative;
+        min-height: 100vh;
+        min-height: 100dvh;
+        overflow: hidden;
+        background: var(--color-bg);
+      }
+
+      .mobile-stub__bg {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 393px;
+        height: 1275px;
+        opacity: 0.6;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .mobile-stub__bg img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center top;
+        display: block;
+      }
+
+      .mobile-stub__inner {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 393px;
+        margin: 0 auto;
+      }
+
+      .mobile-stub__info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+        width: 100%;
+        padding: 100px 16px 40px;
+      }
+
+      .mobile-stub__card {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        width: 290px;
+        max-width: 100%;
+      }
+
+      .mobile-stub__title {
+        margin: 0;
+        font-family: var(--font-headline);
+        font-stretch: extra-condensed;
+        font-style: italic;
+        font-weight: 500;
+        font-size: 58px;
+        line-height: 1;
+        letter-spacing: -2.9px;
+        color: var(--color-text);
+      }
+
+      .mobile-stub__subtitle {
+        margin: 0;
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 1;
+        letter-spacing: -1px;
+        color: var(--color-text);
+      }
+
+      .mobile-stub__dog {
+        width: 37px;
+        height: 37px;
+        border-radius: 8px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .mobile-stub__hint {
+        margin: 0;
+        width: 290px;
+        max-width: 100%;
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 1;
+        letter-spacing: -1px;
+        color: var(--color-text);
+      }
+
+      .mobile-stub__carousel {
+        width: 100%;
+        margin-top: 58px;
+        padding-left: 16px;
+        padding-bottom: 0;
+      }
+
+      .mobile-stub__carousel-track {
+        display: flex;
+        gap: 20px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-padding-left: 0;
+        -webkit-overflow-scrolling: touch;
+        padding-right: 16px;
+        scrollbar-width: none;
+      }
+
+      .mobile-stub__carousel-track::-webkit-scrollbar {
+        display: none;
+      }
+
+      .mobile-stub__slide {
+        flex: 0 0 336px;
+        scroll-snap-align: start;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .mobile-stub__slide-image-wrap {
+        position: relative;
+        width: 100%;
+        height: 386px;
+        border-radius: 33px;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+
+      .mobile-stub__slide-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+        display: block;
+      }
+
+      .mobile-stub__slide-caption {
+        padding: 0 35px;
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: 18px;
+        line-height: normal;
+        letter-spacing: -0.54px;
+        text-transform: uppercase;
+        color: var(--color-text);
+      }
+
+      .mobile-stub__slide-caption p {
+        margin: 0;
+      }
+
+      .mobile-stub__slide-caption--muted {
+        color: rgba(54, 54, 54, 0.5);
+      }
+
+      .mobile-stub__slide-caption--gray {
+        color: #969696;
+      }
+
+      .mobile-stub__contacts {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+        padding: 40px 16px 48px;
+      }
+
+      @media (max-width: 767px) {
+        .mobile-stub {
+          display: block;
+        }
+
+        .nav,
+        .page {
+          display: none !important;
+        }
+      }
+
+      @media (max-width: 900px) {
+        :root {
+          --nav-pad-x: 24px;
+          --header-offset: 88px;
+          --reveal-shift: 20px;
+        }
+
+        .nav {
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+
+        .hero__title {
+          font-size: clamp(36px, 8vw, 58px);
+          letter-spacing: -0.05em;
+        }
+
+        .case__frame {
+          height: min(600px, 70vw);
+        }
+
+        .cases {
+          gap: 48px;
+        }
+
+        .about__title {
+          font-size: clamp(36px, 8vw, 58px);
+          white-space: normal;
+        }
+
+        .footer__title {
+          white-space: normal;
+        }
+
+        .footer__bar-inner {
+          flex-direction: column;
+        }
+
+        .footer__info {
+          flex-direction: column;
+          gap: 32px;
+        }
+
+        .footer__links {
+          flex-basis: auto;
+          width: 100%;
+          justify-content: flex-start;
+        }
+
+        .nav {
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mobile-stub" data-node-id="545:257">
+      <div class="mobile-stub__bg" aria-hidden="true">
+        <img src="assets/mobile/bg-pattern.png" alt="" width="393" height="1275" />
+      </div>
+
+      <div class="mobile-stub__inner">
+        <section class="mobile-stub__info" data-node-id="571:291">
+          <div class="mobile-stub__card" data-node-id="571:292">
+            <h1 class="mobile-stub__title" data-node-id="545:585">Упс, мобилка не готова</h1>
+            <p class="mobile-stub__subtitle" data-node-id="545:586">пожалуйста,<br />зайдите с компа</p>
+            <img class="mobile-stub__dog" src="assets/mobile/dog.png" alt="" width="37" height="37" data-node-id="571:296" />
+          </div>
+          <p class="mobile-stub__hint" data-node-id="545:608">там вы сможете ознакомиться с этими кейсами</p>
+        </section>
+
+        <section class="mobile-stub__carousel" aria-label="Кейсы" data-node-id="571:290">
+          <div class="mobile-stub__carousel-track">
+            <a class="mobile-stub__slide" href="case-ai-florist.html" data-node-id="571:289">
+              <div class="mobile-stub__slide-image-wrap" data-node-id="571:284">
+                <img class="mobile-stub__slide-image" src="assets/mobile/carousel-card-1.png" alt="AI-помощник для роста конверсии" width="336" height="386" />
+              </div>
+              <div class="mobile-stub__slide-caption" data-node-id="571:299">
+                <p>Пользовательские жалобы</p>
+                <p><span class="mobile-stub__slide-caption--muted">и рождение </span><span class="mobile-stub__slide-caption--gray">концепта<br /></span>AI-помощника</p>
+              </div>
+            </a>
+            <a class="mobile-stub__slide" href="case-concepts.html" data-node-id="571:288">
+              <div class="mobile-stub__slide-image-wrap" data-node-id="571:286">
+                <img class="mobile-stub__slide-image" src="assets/mobile/carousel-card-2.png" alt="Дизайн концепты и шоты" width="336" height="386" />
+              </div>
+              <p class="mobile-stub__slide-caption" data-node-id="571:302">Дизайн концепты и шоты</p>
+            </a>
+          </div>
+        </section>
+
+        <nav class="mobile-stub__contacts" aria-label="Контакты" data-node-id="571:283">
+          <a class="btn" href="https://disk.yandex.ru/i/4BlwQLRkXn8ZWQ" target="_blank" rel="noopener noreferrer">
+            <span class="btn__inner">
+              <span class="btn__text">резюме</span>
+              <span class="btn__sep" aria-hidden="true"></span>
+              <span class="btn__icon" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+            </span>
+          </a>
+          <a class="btn" href="https://t.me/iiiuuuppp" target="_blank" rel="noopener noreferrer">
+            <span class="btn__inner">
+              <span class="btn__text">тг</span>
+              <span class="btn__sep" aria-hidden="true"></span>
+              <span class="btn__icon" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+            </span>
+          </a>
+          <a class="btn" href="https://www.linkedin.com/in/tatyana-andriyanova-a01375347" target="_blank" rel="noopener noreferrer">
+            <span class="btn__inner">
+              <span class="btn__text">линкедин</span>
+              <span class="btn__sep" aria-hidden="true"></span>
+              <span class="btn__icon" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+            </span>
+          </a>
+          <a class="btn" href="https://t.me/iiiuuuppprisynki" target="_blank" rel="noopener noreferrer">
+            <span class="btn__inner">
+              <span class="btn__text">тгк</span>
+              <span class="btn__sep" aria-hidden="true"></span>
+              <span class="btn__icon" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+            </span>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <header class="nav" data-node-id="441:1564">
+      <a class="btn btn--brand" href="index.html">
+        <span class="btn__inner"><span class="btn__text">Татьяна Андриянова</span></span>
+      </a>
+      <div class="nav__links" data-node-id="441:1566">
+        <a class="btn" href="https://disk.yandex.ru/i/4BlwQLRkXn8ZWQ" target="_blank" rel="noopener noreferrer">
+          <span class="btn__inner">
+            <span class="btn__text">резюме</span>
+            <span class="btn__sep" aria-hidden="true"></span>
+            <span class="btn__icon" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+          </span>
+        </a>
+        <a class="btn" href="https://t.me/iiiuuuppp" target="_blank" rel="noopener noreferrer">
+          <span class="btn__inner">
+            <span class="btn__text">тг</span>
+            <span class="btn__sep" aria-hidden="true"></span>
+            <span class="btn__icon" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <div class="page">
+      <div class="page__bg" aria-hidden="true">
+        <div class="page__bg-inner"></div>
+      </div>
+
+      <div class="page__content">
+      <section class="hero" data-node-id="441:1544">
+        <div class="hero__reveal js-reveal" data-reveal-delay="0">
+          <div class="hero__inner js-scroll-parallax">
+            <div class="hero__image-block" data-node-id="441:1545">
+              <div class="hero__image-wrap">
+                <img class="hero__image" src="assets/hero.png" alt="Таня, продуктовый дизайнер" width="403" height="198" />
+              </div>
+              <div class="hero__greeting" data-node-id="441:1546">
+                <div class="hero__greeting-inner">Привет!!</div>
+              </div>
+            </div>
+
+            <div class="hero__main" data-node-id="441:1549">
+              <div class="hero__titles" data-node-id="441:1550">
+                <p class="hero__title hero__title--italic" data-node-id="441:1552">Продуктовый дизайнер</p>
+
+                <div class="hero__title-row" data-node-id="441:1553">
+                  <div class="hero__title-icon" data-node-id="441:1554">
+                    <img src="assets/title-flower-1.png" alt="" width="63" height="63" />
+                  </div>
+                  <p class="hero__title hero__title--muted" data-node-id="441:1555">b2b и b2c</p>
+                </div>
+
+                <p class="hero__title-multiline" data-node-id="441:1556"><span class="hero__title hero__title--italic">Люблю, </span><span class="hero__title hero__title--regular">как дизайн влияет </span><br aria-hidden="true" /><span class="hero__title hero__title--regular">на </span><span class="hero__title hero__title--italic">восприятие мира</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cases" data-node-id="441:1571">
+        <article class="case js-reveal" data-reveal-delay="160" data-node-id="441:1572">
+          <a class="case__link" href="case-ai-florist.html">
+            <div class="case__frame">
+              <div class="case__frame-bg" aria-hidden="true">
+                <img src="assets/case-1-bg.png" alt="" width="1080" height="600" />
+              </div>
+              <div class="case__phones">
+                <div class="case__phone case__phone--1">
+                  <img src="assets/case-1-phone-1.png" alt="" width="256" height="525" />
+                </div>
+                <div class="case__phone case__phone--2">
+                  <img src="assets/case-1-phone-2.png" alt="" width="256" height="525" />
+                </div>
+                <div class="case__phone case__phone--3">
+                  <img src="assets/case-1-phone-3.png" alt="" width="256" height="525" />
+                </div>
+              </div>
+              <div class="case__tags">
+                <span class="tag"><span class="tag__inner">b2b</span></span>
+                <span class="tag"><span class="tag__inner">конверсия</span></span>
+                <span class="tag"><span class="tag__inner">возвращаемость</span></span>
+              </div>
+            </div>
+            <div class="case__footer">
+              <div class="case__caption">
+                <p class="case__caption-line">Пользовательские жалобы </p>
+                <p class="case__caption-line"><span class="case__caption--muted">и рождение </span><span class="case__caption--gray">концепта </span>AI-помощника для роста конверсии</p>
+              </div>
+              <span class="btn btn--icon" aria-hidden="true">
+                <span class="btn__inner">
+                  <span class="btn__icon" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </span>
+                </span>
+              </span>
+            </div>
+          </a>
+        </article>
+
+        <article class="case js-reveal" data-reveal-delay="85" data-node-id="441:1587">
+          <a class="case__link" href="case-concepts.html">
+            <div class="case__frame case__frame--dark">
+              <div class="case__phones">
+                <div class="case__phone case__phone--dark-1">
+                  <div class="case__phone-crop case__phone-crop--a">
+                    <img src="assets/case-2-phone-1.png" alt="" width="256" height="525" />
+                  </div>
+                </div>
+                <div class="case__phone case__phone--dark-2">
+                  <div class="case__phone-crop case__phone-crop--b">
+                    <img src="assets/case-2-phone-2.png" alt="" width="256" height="525" />
+                  </div>
+                </div>
+                <div class="case__phone case__phone--dark-3">
+                  <div class="case__phone-crop case__phone-crop--c">
+                    <img src="assets/case-2-phone-3.png" alt="" width="256" height="525" />
+                  </div>
+                </div>
+              </div>
+              <div class="case__tags case__tags--right">
+                <span class="tag tag--dark"><span class="tag__inner">красивое</span></span>
+              </div>
+            </div>
+            <div class="case__footer">
+              <div class="case__caption">
+                <p class="case__caption-line">Дизайн концепты</p>
+                <p class="case__caption-line">и шотики</p>
+              </div>
+              <span class="btn btn--icon" aria-hidden="true">
+                <span class="btn__inner">
+                  <span class="btn__icon" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </span>
+                </span>
+              </span>
+            </div>
+          </a>
+        </article>
+
+        <div class="case__row" data-node-id="441:1596">
+          <article class="case case--half js-reveal" data-reveal-delay="170" data-node-id="441:1597">
+            <a class="case__link" href="#">
+              <div class="case__cover">
+                <img src="assets/case-3-cover.png" alt="" width="527" height="360" />
+              </div>
+              <p class="case__caption case__caption-line"><span class="case__caption--muted">Как мы создаем </span><span>сервис по учету финансов</span> <span>для малого бизнеса</span><span class="case__caption--muted">: <br />от идеи до первых 1000 клиентов</span></p>
+            </a>
+          </article>
+
+          <article class="case case--half js-reveal" data-reveal-delay="255" data-node-id="441:1601">
+            <a class="case__link" href="#">
+              <div class="case__cover">
+                <img src="assets/case-4-cover.png" alt="" width="527" height="360" />
+              </div>
+              <p class="case__caption case__caption-line">ВК Маркет: как мы нашли точку роста <br />в механике вишлистов</p>
+            </a>
+          </article>
+        </div>
+      </section>
+
+      <section class="about" data-node-id="441:1525">
+        <h2 class="about__title js-reveal" data-reveal-delay="0"><span class="js-scroll-parallax">Еще немного обо мне</span></h2>
+        <div class="about__sections">
+          <div class="about__section js-reveal" data-reveal-delay="80" data-node-id="441:1528">
+            <div class="js-scroll-parallax">
+            <div class="about__text" data-node-id="441:1529">
+              <p class="about__text-primary">Выпускала малотиражную колоду карт таро</p>
+              <p class="about__text-secondary">
+                Руководила командой<br />
+                из 30+ художников и занималась<br />
+                арт-дирекшеном проекта
+              </p>
+            </div>
+            <div class="about__cards about__cards--tarot" data-node-id="441:1532">
+              <div class="about__card about__card--tarot-back">
+                <img src="assets/about-tarot-back.png" alt="" width="182" height="305" />
+              </div>
+              <div class="about__card about__card--tarot-front">
+                <img src="assets/about-tarot-front.png" alt="" width="182" height="305" />
+              </div>
+              <span class="about__badge" data-node-id="441:1535">Эту рисовала я!</span>
+            </div>
+            </div>
+          </div>
+
+          <div class="about__section about__section--compact js-reveal" data-reveal-delay="160" data-node-id="441:1537">
+            <div class="js-scroll-parallax">
+            <div class="about__text" data-node-id="441:1538">
+              <p class="about__text-primary">По образованию<br />я графический дизайнер</p>
+              <p class="about__text-secondary">А еще я люблю рисовать людей</p>
+            </div>
+            <div class="about__cards about__cards--art" data-node-id="441:1541">
+              <div class="about__card about__card--art-photo">
+                <img src="assets/about-art-photo.png" alt="" width="182" height="223" />
+              </div>
+              <div class="about__card about__card--art-sketch">
+                <div class="about__card-crop">
+                  <img src="assets/about-art-sketch.png" alt="" width="182" height="200" />
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer" data-node-id="441:1605">
+        <div class="footer__title-wrap js-reveal" data-reveal-delay="0">
+          <h2 class="footer__title js-scroll-parallax">Давайте знакомиться?</h2>
+        </div>
+        <div class="footer__bar js-reveal" data-reveal-delay="80">
+          <div class="js-scroll-parallax footer__bar-inner">
+          <div class="footer__info" data-node-id="441:1608">
+            <div class="footer__col" data-node-id="441:1609">
+              <p class="footer__name">Татьяна</p>
+              <p class="footer__meta">я в Москве</p>
+            </div>
+            <div class="footer__col" data-node-id="441:1612">
+              <button class="footer__email" type="button" id="copy-email-btn" data-email="a34203462@gmail.com">a34203462@gmail.com</button>
+              <p class="footer__meta footer__meta--email">мой email</p>
+              <p class="footer__copy-note" id="copy-email-note" role="status" aria-live="polite">Скопировано!</p>
+            </div>
+          </div>
+          <div class="footer__links nav__links" data-node-id="441:1615">
+            <a class="btn" href="https://disk.yandex.ru/i/4BlwQLRkXn8ZWQ" target="_blank" rel="noopener noreferrer">
+              <span class="btn__inner">
+                <span class="btn__text">резюме</span>
+                <span class="btn__sep" aria-hidden="true"></span>
+                <span class="btn__icon" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+              </span>
+            </a>
+            <a class="btn" href="https://t.me/iiiuuuppp" target="_blank" rel="noopener noreferrer">
+              <span class="btn__inner">
+                <span class="btn__text">тг</span>
+                <span class="btn__sep" aria-hidden="true"></span>
+                <span class="btn__icon" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+              </span>
+            </a>
+            <a class="btn" href="https://www.linkedin.com/in/tatyana-andriyanova-a01375347" target="_blank" rel="noopener noreferrer">
+              <span class="btn__inner">
+                <span class="btn__text">линкедин</span>
+                <span class="btn__sep" aria-hidden="true"></span>
+                <span class="btn__icon" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+              </span>
+            </a>
+            <a class="btn" href="https://t.me/iiiuuuppprisynki" target="_blank" rel="noopener noreferrer">
+              <span class="btn__inner">
+                <span class="btn__text">тгк</span>
+                <span class="btn__sep" aria-hidden="true"></span>
+                <span class="btn__icon" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+              </span>
+            </a>
+          </div>
+          </div>
+        </div>
+      </footer>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const MOSCOW_TZ = "Europe/Moscow";
+
+        function pad2(n) {
+          return String(n).padStart(2, "0");
+        }
+
+        function getMoscowTimeParts(date) {
+          const parts = new Intl.DateTimeFormat("en-US", {
+            timeZone: MOSCOW_TZ,
+            hour: "numeric",
+            minute: "numeric",
+            hour12: false,
+          }).formatToParts(date);
+          let hour = 0;
+          let minute = 0;
+          for (const p of parts) {
+            if (p.type === "hour") hour = Number(p.value);
+            if (p.type === "minute") minute = Number(p.value);
+          }
+          return { hour, minute };
+        }
+
+        function formatMoscowClock(date) {
+          const { hour, minute } = getMoscowTimeParts(date);
+          return `${pad2(hour)}:${pad2(minute)}`;
+        }
+
+        function setMoscowDatetimeAttr(el, date) {
+          const parts = new Intl.DateTimeFormat("en-CA", {
+            timeZone: MOSCOW_TZ,
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          }).formatToParts(date);
+          const get = (t) => parts.find((p) => p.type === t)?.value ?? "00";
+          el.setAttribute(
+            "datetime",
+            `${get("year")}-${get("month")}-${get("day")}T${get("hour")}:${get("minute")}:00+03:00`
+          );
+        }
+
+        function initMoscowClock() {
+          const el = document.getElementById("moscow-time");
+          if (!el) return;
+          const tick = () => {
+            const now = new Date();
+            el.textContent = formatMoscowClock(now);
+            setMoscowDatetimeAttr(el, now);
+          };
+          tick();
+          setInterval(tick, 60_000);
+        }
+
+        function scheduleReveal(el) {
+          if (el.classList.contains("is-visible")) return;
+          const delay = Number(el.dataset.revealDelay || 0);
+          window.setTimeout(() => {
+            el.classList.add("is-visible");
+          }, delay);
+        }
+
+        function initReveals() {
+          const reveals = document.querySelectorAll(".js-reveal");
+          if (!reveals.length) return;
+
+          if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            reveals.forEach((el) => el.classList.add("is-visible"));
+            return;
+          }
+
+          const introEls = document.querySelectorAll(
+            ".hero .js-reveal, .cases > .case.js-reveal:first-child"
+          );
+          introEls.forEach((el) => scheduleReveal(el));
+
+          const io = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                scheduleReveal(entry.target);
+                io.unobserve(entry.target);
+              });
+            },
+            { root: null, threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+          );
+
+          reveals.forEach((el) => {
+            const isIntro =
+              el.closest(".hero") || el.matches(".cases > .case.js-reveal:first-child");
+            if (isIntro) return;
+            io.observe(el);
+          });
+        }
+
+        function initScrollParallax() {
+          const layers = document.querySelectorAll(".js-scroll-parallax");
+          if (!layers.length) return;
+          if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+          const scrollRange = 1000;
+          const maxTranslate = -100;
+          const minScale = 0.8;
+          const items = Array.from(layers).map((layer) => ({
+            layer,
+            trigger: layer.closest(".js-reveal") || layer.parentElement,
+          }));
+          let ticking = false;
+
+          const update = () => {
+            const scrollY = window.scrollY;
+
+            items.forEach(({ layer, trigger }) => {
+              if (!trigger) return;
+              const start = trigger.getBoundingClientRect().top + scrollY;
+              const scrolled = scrollY - start;
+              const progress = Math.min(1, Math.max(0, scrolled / scrollRange));
+              const translateY = maxTranslate * progress;
+              const scale = 1 - (1 - minScale) * progress;
+
+              layer.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale})`;
+            });
+
+            ticking = false;
+          };
+
+          window.addEventListener(
+            "scroll",
+            () => {
+              if (ticking) return;
+              ticking = true;
+              window.requestAnimationFrame(update);
+            },
+            { passive: true }
+          );
+
+          window.addEventListener("resize", update, { passive: true });
+          update();
+        }
+
+        function initEmailCopy() {
+          const btn = document.getElementById("copy-email-btn");
+          const note = document.getElementById("copy-email-note");
+          if (!btn || !note) return;
+
+          let hideTimer;
+
+          btn.addEventListener("click", async () => {
+            const email = btn.dataset.email || btn.textContent.trim();
+            try {
+              await navigator.clipboard.writeText(email);
+            } catch {
+              const area = document.createElement("textarea");
+              area.value = email;
+              area.setAttribute("readonly", "");
+              area.style.position = "fixed";
+              area.style.left = "-9999px";
+              document.body.appendChild(area);
+              area.select();
+              document.execCommand("copy");
+              document.body.removeChild(area);
+            }
+
+            note.classList.add("is-visible");
+            window.clearTimeout(hideTimer);
+            hideTimer = window.setTimeout(() => {
+              note.classList.remove("is-visible");
+            }, 2000);
+          });
+        }
+
+        function syncPageBgHeight() {
+          const page = document.querySelector(".page");
+          const bg = document.querySelector(".page__bg");
+          const inner = document.querySelector(".page__bg-inner");
+          if (!page || !bg || !inner) return;
+          const h = page.offsetHeight;
+          bg.style.height = `${h}px`;
+          inner.style.minHeight = `${h}px`;
+        }
+
+        function initNavAutoHide() {
+          const nav = document.querySelector(".nav");
+          if (!nav) return;
+
+          let lastY = window.scrollY;
+          let ticking = false;
+
+          const update = () => {
+            const y = window.scrollY;
+            if (y < 24) {
+              nav.classList.remove("is-hidden");
+            } else if (y > lastY + 4) {
+              nav.classList.add("is-hidden");
+            } else if (y < lastY - 4) {
+              nav.classList.remove("is-hidden");
+            }
+            lastY = y;
+            ticking = false;
+          };
+
+          window.addEventListener(
+            "scroll",
+            () => {
+              if (ticking) return;
+              ticking = true;
+              window.requestAnimationFrame(update);
+            },
+            { passive: true }
+          );
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+          initScrollParallax();
+          initReveals();
+          initNavAutoHide();
+          initEmailCopy();
+          syncPageBgHeight();
+          window.addEventListener("resize", syncPageBgHeight);
+          window.addEventListener("load", syncPageBgHeight);
+        });
+      })();
+    </script>
+  </body>
+</html>

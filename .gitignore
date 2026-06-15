@@ -1,0 +1,6 @@
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+.cursor/
+scripts/download-assets.ps1
