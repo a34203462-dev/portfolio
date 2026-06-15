@@ -672,49 +672,71 @@
       }
 
       .case-accordion__media {
+        position: relative;
         width: 100%;
         border-radius: 20px;
         overflow: hidden;
-        position: relative;
         background: radial-gradient(ellipse at center, var(--color-media-grad-start) 0%, var(--color-media-grad-end) 100%);
       }
 
       .case-accordion__media--tall {
-        min-height: 600px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        height: 600px;
       }
 
       .case-accordion__media--short {
-        min-height: 363px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        height: 363px;
       }
 
-      .case-accordion__media img {
+      .case-accordion__image {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        overflow: hidden;
+        transform: translate(-50%, -50%);
+        transform-origin: center center;
+        transition:
+          transform 0.45s var(--reveal-ease),
+          opacity 0.42s var(--accordion-ease);
+        opacity: 0;
+      }
+
+      .case-accordion__media--tall .case-accordion__image {
+        width: 64.74%;
+        height: 85.33%;
+      }
+
+      .case-accordion__media--short .case-accordion__image {
+        width: 64.74%;
+        height: 71.63%;
+        border-radius: 11px;
+      }
+
+      .case-accordion__media--wide .case-accordion__image {
+        width: 80.25%;
+        height: 76.58%;
+        border-radius: 11px;
+      }
+
+      .case-accordion__image img {
         display: block;
         width: 100%;
-        max-width: 100%;
-        height: auto;
+        height: 100%;
         object-fit: contain;
-        opacity: 0;
-        transform: translateY(12px);
-        transition:
-          opacity 0.42s var(--accordion-ease),
-          transform 0.42s var(--accordion-ease);
       }
 
-      .case-accordion__item.is-open:not(.is-closing) .case-accordion__media img {
+      .case-accordion__image:hover {
+        z-index: 1;
+        transform: translate(-50%, -50%) scale(1.06);
+      }
+
+      .case-accordion__item.is-open:not(.is-closing) .case-accordion__image {
         opacity: 1;
-        transform: translateY(0);
         transition-delay: 0.16s;
       }
 
-      .case-accordion__item.is-closing .case-accordion__media img {
+      .case-accordion__item.is-closing .case-accordion__image {
         opacity: 0;
-        transform: translateY(8px);
+        transform: translate(-50%, -50%) translateY(8px);
         transition-duration: 0.2s;
         transition-delay: 0s;
       }
@@ -1123,6 +1145,16 @@
           transition: none !important;
         }
 
+        .case-accordion__image {
+          opacity: 1 !important;
+          transform: translate(-50%, -50%) !important;
+          transition: none !important;
+        }
+
+        .case-accordion__image:hover {
+          transform: translate(-50%, -50%) !important;
+        }
+
         .case-accordion__item:not(.is-open) .case-accordion__panel,
         .case-accordion__item:not(.is-open) .case-accordion__media-slot {
           display: none;
@@ -1368,7 +1400,9 @@
               </div>
               <div class="case-accordion__media-slot">
                 <div class="case-accordion__media case-accordion__media--tall">
-                  <img src="assets/case-ai/accordion-flow.png" alt="Схема флоу выбора в приложении" width="459" height="512" />
+                  <div class="case-accordion__image">
+                    <img src="assets/case-ai/accordion-flow.png" alt="Схема флоу выбора в приложении" width="459" height="512" />
+                  </div>
                 </div>
               </div>
               <div class="case-accordion__panel">
@@ -1431,7 +1465,9 @@
               </div>
               <div class="case-accordion__media-slot">
                 <div class="case-accordion__media case-accordion__media--short">
-                  <img src="assets/case-ai/accordion-interview.png" alt="Сегменты пользователей" width="459" height="260" />
+                  <div class="case-accordion__image">
+                    <img src="assets/case-ai/accordion-interview.png" alt="Сегменты пользователей" width="459" height="260" />
+                  </div>
                 </div>
               </div>
               <div class="case-accordion__panel">
@@ -1523,8 +1559,10 @@
                 </div>
               </div>
               <div class="case-accordion__media-slot">
-                <div class="case-accordion__media case-accordion__media--short">
-                  <img src="assets/case-ai/accordion-swot.png" alt="SWOT-анализ AI-помощников" width="569" height="278" />
+                <div class="case-accordion__media case-accordion__media--short case-accordion__media--wide">
+                  <div class="case-accordion__image">
+                    <img src="assets/case-ai/accordion-swot.png" alt="SWOT-анализ AI-помощников" width="569" height="278" />
+                  </div>
                 </div>
               </div>
               <div class="case-accordion__panel case-accordion__panel--tail">
