@@ -1,0 +1,2127 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI-флорист для flowwow — Татьяна Андриянова</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:wght@400;500;600&family=Noto+Serif:ital,wdth,wght@0,62.5,500;0,62.5,600;1,62.5,500;1,62.5,600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --color-bg: #ffffff;
+        --color-text: #363636;
+        --color-lead: #909090;
+        --color-section-title: #989898;
+        --color-section-title-alt: #a8a8a8;
+        --color-note: #c0c0c0;
+        --color-date: #989898;
+        --color-white: #ffffff;
+        --color-btn-border: #eae9e9;
+        --color-btn-bg: #f9f9f9;
+        --color-btn-hover: #2f80ed;
+        --color-btn-hover-border: #1466d4;
+        --color-btn-hover-highlight: #5ba1ff;
+        --color-media-grad-start: #ebe9ff;
+        --color-media-grad-end: #f2f1f7;
+        --container: 1280px;
+        --case-content: 1200px;
+        --case-text: 700px;
+        --case-media: 1100px;
+        --nav-pad-x: 100px;
+        --header-offset: 80px;
+        --font-headline: "Noto Serif", serif;
+        --font-body: "Google Sans Code", monospace;
+        --reveal-duration: 0.65s;
+        --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+        --reveal-shift: 28px;
+        --bg-pattern-width: 1700px;
+        --case-gap: 50px;
+        --case-page-top: 46px;
+        --case-rec-gap: 77px;
+        --accordion-open-duration: 0.55s;
+        --accordion-close-duration: 0.95s;
+        --accordion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+        --accordion-scroll-gap: 24px;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      #design-solution {
+        scroll-margin-top: calc(var(--header-offset) + 24px);
+      }
+
+      body {
+        margin: 0;
+        background: var(--color-bg);
+        color: var(--color-text);
+        font-family: var(--font-body);
+      }
+
+      .page {
+        position: relative;
+        z-index: 1;
+        padding-top: var(--header-offset);
+        padding-bottom: 0;
+      }
+
+      .page__bg {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .page__bg-inner {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: var(--bg-pattern-width);
+        max-width: 100vw;
+        margin-left: calc(var(--bg-pattern-width) / -2);
+        height: 100%;
+        min-height: 100%;
+        opacity: 0.6;
+        background-image: url("../assets/bg-pattern.png");
+        background-repeat: repeat-y;
+        background-position: center top;
+        background-size: var(--bg-pattern-width) auto;
+      }
+
+      .page__content {
+        position: relative;
+        z-index: 1;
+      }
+
+      .nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        max-width: var(--container);
+        margin: 0 auto;
+        padding: 30px var(--nav-pad-x) 0;
+        background: transparent;
+        transition: transform 0.35s var(--reveal-ease);
+      }
+
+      .nav.is-hidden {
+        transform: translateY(calc(-100% - 8px));
+      }
+
+      .nav__links {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .btn {
+        display: inline-flex;
+        flex-direction: column;
+        height: 50px;
+        border: 0.5px solid var(--color-btn-border);
+        border-radius: 18px;
+        padding: 0;
+        margin: 0;
+        background: none;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+        transition: border-color 0.2s ease;
+        flex-shrink: 0;
+        font: inherit;
+      }
+
+      .btn--sm {
+        height: 40px;
+      }
+
+      .btn__inner {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        height: 100%;
+        padding: 0 16px;
+        border-radius: 18px;
+        background: var(--color-btn-bg);
+        border-left: 1px solid var(--color-white);
+        border-top: 1px solid var(--color-white);
+        transition:
+          background 0.2s ease,
+          border-color 0.2s ease,
+          color 0.2s ease;
+      }
+
+      .btn--brand .btn__inner {
+        padding: 0 18px;
+      }
+
+      .btn--icon .btn__inner {
+        width: 44px;
+        padding: 0;
+        justify-content: center;
+      }
+
+      .btn--icon.btn--sm .btn__inner {
+        width: 45.2px;
+      }
+
+      .btn__text {
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: 17px;
+        letter-spacing: -0.51px;
+        line-height: normal;
+        color: var(--color-text);
+        white-space: nowrap;
+        transition: color 0.2s ease;
+      }
+
+      .btn__sep {
+        width: 0;
+        height: 16px;
+        border-left: 1px solid #d4d4d4;
+        flex-shrink: 0;
+        transition: border-color 0.2s ease;
+      }
+
+      .btn__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        color: #808080;
+        transition: color 0.2s ease;
+      }
+
+      .btn__icon svg {
+        display: block;
+      }
+
+      .btn:hover,
+      .btn:focus-visible {
+        border-color: var(--color-btn-hover-border);
+        outline: none;
+      }
+
+      .btn:hover .btn__inner,
+      .btn:focus-visible .btn__inner {
+        background: var(--color-btn-hover);
+        border-left-color: var(--color-btn-hover-highlight);
+        border-top-color: var(--color-btn-hover-highlight);
+      }
+
+      .btn:hover .btn__text,
+      .btn:focus-visible .btn__text {
+        color: var(--color-white);
+      }
+
+      .btn:hover .btn__sep,
+      .btn:focus-visible .btn__sep {
+        border-left-color: rgba(255, 255, 255, 0.45);
+      }
+
+      .btn:hover .btn__icon,
+      .btn:focus-visible .btn__icon {
+        color: var(--color-white);
+      }
+
+      .case-page {
+        max-width: var(--case-content);
+        margin: var(--case-page-top) auto 0;
+        padding: 40px 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--case-gap);
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(4.4px);
+        -webkit-backdrop-filter: blur(4.4px);
+        border-radius: 30px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.09);
+      }
+
+      .btn--fit {
+        align-self: flex-start;
+        width: auto;
+        flex-shrink: 0;
+      }
+
+      .case-intro {
+        padding: 0 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .case-intro__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 0;
+      }
+
+      .case-intro__date {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--color-date);
+      }
+
+      .case-intro__body {
+        width: 100%;
+        max-width: 701px;
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+        margin-top: 0;
+      }
+
+      .case-intro__title-block {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .case-intro__title {
+        margin: 0 0 -5px;
+        font-family: var(--font-headline);
+        font-stretch: extra-condensed;
+        font-weight: 500;
+        font-size: clamp(48px, 8vw, 93px);
+        line-height: 1;
+        letter-spacing: -1.395px;
+        color: var(--color-text);
+      }
+
+      .case-intro__title-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .case-intro__title--italic {
+        font-style: italic;
+        font-weight: 600;
+      }
+
+      .case-intro__icon {
+        position: relative;
+        width: 84px;
+        height: 92px;
+        flex-shrink: 0;
+      }
+
+      .case-intro__icon-inner {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 69px;
+        height: 69px;
+        transform: translate(-50%, -35%) rotate(22.14deg);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      }
+
+      .case-intro__icon-inner img {
+        position: absolute;
+        width: 117%;
+        height: 234%;
+        left: -8.5%;
+        top: -67%;
+        max-width: none;
+        object-fit: cover;
+      }
+
+      .case-intro__desc {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 400;
+        line-height: normal;
+        color: var(--color-text);
+      }
+
+      .case-intro__desc p {
+        margin: 0 0 1em;
+      }
+
+      .case-intro__desc p:last-child {
+        margin-bottom: 0;
+      }
+
+      .case-section {
+        width: 100%;
+        max-width: var(--case-text);
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        font-size: 17px;
+        font-weight: 400;
+        line-height: normal;
+      }
+
+      .case-section--lg {
+        font-size: 18px;
+      }
+
+      .case-section__group {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .case-section__label {
+        margin: 0;
+        font-size: inherit;
+        font-weight: 400;
+        text-transform: uppercase;
+        color: var(--color-section-title);
+      }
+
+      .case-section__label--alt {
+        color: var(--color-section-title-alt);
+      }
+
+      .case-section__text {
+        margin: 0;
+        color: var(--color-text);
+      }
+
+      .case-section__note {
+        margin: 0;
+        font-size: 14px;
+        color: var(--color-note);
+        max-width: 493px;
+      }
+
+      .case-section ul {
+        margin: 0;
+        padding-left: 25.5px;
+      }
+
+      .case-section li {
+        margin-bottom: 0;
+      }
+
+      .case-section__row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        width: 100%;
+        padding: 10px 0;
+      }
+
+      .case-media {
+        width: 100%;
+        max-width: var(--case-content);
+        margin: 0 auto;
+        padding: 0 50px;
+      }
+
+      .case-media__frame {
+        position: relative;
+        width: 100%;
+        border-radius: 30px;
+        overflow: hidden;
+        background: radial-gradient(ellipse at center, var(--color-media-grad-start) 0%, var(--color-media-grad-end) 100%);
+      }
+
+      .case-media__frame--glass {
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(4.4px);
+        -webkit-backdrop-filter: blur(4.4px);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.09);
+      }
+
+      .case-media__frame--phones {
+        height: 450px;
+      }
+
+      .case-media__frame--reviews {
+        height: 245px;
+      }
+
+      .case-media__frame--research {
+        height: 208px;
+      }
+
+      .case-media__frame--tall {
+        height: 700px;
+      }
+
+      .case-media__frame--short {
+        height: 310px;
+      }
+
+      .case-media__frame--entry {
+        height: 300px;
+      }
+
+      .case-media__frame--thanks {
+        height: auto;
+        background: transparent;
+        box-shadow: none;
+        overflow: visible;
+      }
+
+      .case-phones {
+        position: absolute;
+        inset: 0;
+      }
+
+      .case-phones__item {
+        position: absolute;
+        width: 23.26%;
+        height: 116.67%;
+        transition: transform 0.45s var(--reveal-ease);
+        transform-origin: center center;
+        z-index: 1;
+      }
+
+      .case-phones__item img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+        pointer-events: none;
+      }
+
+      .case-phones__item--1 {
+        left: 11.27%;
+        top: 34.67%;
+      }
+
+      .case-phones__item--2 {
+        left: 50%;
+        top: 14.67%;
+        transform: translateX(-50%);
+      }
+
+      .case-phones__item--3 {
+        left: 65.45%;
+        top: -63.33%;
+      }
+
+      .case-phones__item:hover {
+        z-index: 3;
+        transform: scale(1.06);
+      }
+
+      .case-phones__item--2:hover {
+        transform: translateX(-50%) scale(1.06);
+      }
+
+      .case-reviews {
+        position: absolute;
+        left: 50%;
+        top: 54px;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        width: 78.55%;
+        max-width: 864px;
+      }
+
+      .case-reviews__item {
+        position: relative;
+        flex: 0 0 280px;
+        width: 280px;
+        max-width: calc((100% - 24px) / 3);
+        transition: transform 0.45s var(--reveal-ease);
+        transform-origin: center center;
+        z-index: 1;
+      }
+
+      .case-reviews__item img {
+        width: 100%;
+        height: auto;
+        display: block;
+        pointer-events: none;
+      }
+
+      .case-reviews__item:hover {
+        z-index: 3;
+        transform: scale(1.06);
+      }
+
+      .case-research-collage {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 30px;
+      }
+
+      .case-accordion {
+        width: 100%;
+        max-width: 745px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 0 20px;
+      }
+
+      .case-accordion__item {
+        background: var(--color-white);
+        border: 1px solid var(--color-btn-border);
+        border-radius: 18px;
+        padding: 16px 18px;
+        text-align: left;
+        font: inherit;
+        color: inherit;
+      }
+
+      .case-accordion__item--flow {
+        border-radius: 24px;
+      }
+
+      .case-accordion__title {
+        margin: 0 0 20px;
+        font-size: 18px;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: var(--color-text);
+      }
+
+      .case-accordion__preview {
+        margin: 0 0 20px;
+        font-size: 17px;
+        font-weight: 400;
+        color: var(--color-text);
+      }
+
+      .case-accordion__preview ul {
+        margin: 0;
+        padding-left: 25.5px;
+      }
+
+      .case-accordion__teaser {
+        display: grid;
+        grid-template-rows: 1fr;
+        overflow: hidden;
+        transition: grid-template-rows var(--accordion-open-duration) var(--accordion-ease);
+      }
+
+      .case-accordion__teaser-inner {
+        min-height: 0;
+        overflow: hidden;
+      }
+
+      .case-accordion__item.is-open .case-accordion__teaser {
+        grid-template-rows: 0fr;
+        pointer-events: none;
+      }
+
+      .case-accordion__item.is-closing .case-accordion__teaser {
+        transition-duration: var(--accordion-close-duration);
+      }
+
+      .case-accordion__panel {
+        display: grid;
+        grid-template-rows: 0fr;
+        overflow: hidden;
+        transition: grid-template-rows var(--accordion-open-duration) var(--accordion-ease);
+      }
+
+      .case-accordion__item.is-open .case-accordion__panel {
+        grid-template-rows: 1fr;
+      }
+
+      .case-accordion__item.is-closing .case-accordion__panel {
+        transition-duration: var(--accordion-close-duration);
+      }
+
+      .case-accordion__panel-inner {
+        min-height: 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .case-accordion__media-slot {
+        display: none;
+      }
+
+      .case-accordion__item.is-open .case-accordion__media-slot {
+        display: block;
+        margin: 20px 0;
+      }
+
+      .case-accordion__media {
+        position: relative;
+        width: 100%;
+        border-radius: 20px;
+        overflow: hidden;
+        background: radial-gradient(ellipse at center, var(--color-media-grad-start) 0%, var(--color-media-grad-end) 100%);
+      }
+
+      .case-accordion__media--tall {
+        height: 600px;
+      }
+
+      .case-accordion__media--short {
+        height: 363px;
+      }
+
+      .case-accordion__image {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        overflow: hidden;
+        transform: translate(-50%, -50%);
+        transform-origin: center center;
+        transition:
+          transform 0.45s var(--reveal-ease),
+          opacity 0.42s var(--accordion-ease);
+        opacity: 0;
+      }
+
+      .case-accordion__media--tall .case-accordion__image {
+        width: 64.74%;
+        height: 85.33%;
+      }
+
+      .case-accordion__media--short .case-accordion__image {
+        width: 64.74%;
+        height: 71.63%;
+        border-radius: 11px;
+      }
+
+      .case-accordion__media--wide .case-accordion__image {
+        width: 80.25%;
+        height: 76.58%;
+        border-radius: 11px;
+      }
+
+      .case-accordion__image img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .case-accordion__image:hover {
+        z-index: 1;
+        transform: translate(-50%, -50%) scale(1.06);
+      }
+
+      .case-accordion__item.is-open:not(.is-closing) .case-accordion__image {
+        opacity: 1;
+        transition-delay: 0.16s;
+      }
+
+      .case-accordion__item.is-closing .case-accordion__image {
+        opacity: 0;
+        transform: translate(-50%, -50%) translateY(8px);
+        transition-duration: 0.2s;
+        transition-delay: 0s;
+      }
+
+      .case-accordion__text {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 400;
+        line-height: normal;
+        color: var(--color-text);
+      }
+
+      .case-accordion__text ul {
+        margin: 0;
+        padding-left: 25.5px;
+      }
+
+      .case-accordion__text p {
+        margin: 0 0 1em;
+      }
+
+      .case-accordion__text p:last-child {
+        margin-bottom: 0;
+      }
+
+      .case-carousel {
+        display: flex;
+        gap: 10px;
+        width: 100%;
+      }
+
+      .case-carousel--tall {
+        height: 700px;
+      }
+
+      .case-carousel--short {
+        height: 310px;
+      }
+
+      .case-carousel__col {
+        flex: 1 1 0;
+        min-width: 0;
+        height: 100%;
+        border-radius: 30px;
+        overflow: hidden;
+        position: relative;
+        background: radial-gradient(ellipse at center, var(--color-media-grad-start) 0%, var(--color-media-grad-end) 100%);
+      }
+
+      .case-carousel__shot {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 70.9%;
+        height: 75%;
+        transform: translate(-50%, -50%);
+        transition: transform 0.45s var(--reveal-ease);
+        transform-origin: center center;
+        z-index: 1;
+      }
+
+      .case-carousel__shot:hover {
+        z-index: 3;
+        transform: translate(-50%, -50%) scale(1.06);
+      }
+
+      .case-carousel--short .case-carousel__shot {
+        width: 71.07%;
+        height: 169.35%;
+      }
+
+      .case-carousel--short .case-carousel__shot--low {
+        top: calc(50% + 154.5px);
+      }
+
+      .case-carousel--short .case-carousel__shot--high {
+        top: calc(50% - 155.5px);
+      }
+
+      .case-carousel--short .case-carousel__shot--high-alt {
+        top: calc(50% - 156.5px);
+      }
+
+      .case-carousel__shot img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        pointer-events: none;
+      }
+
+      .case-carousel--tall .case-carousel__shot img {
+        object-fit: cover;
+      }
+
+      [data-accordion-close] {
+        align-self: flex-start;
+        width: auto;
+      }
+
+      [data-accordion-close] .btn__icon svg {
+        transform: rotate(180deg);
+      }
+
+      .case-phone {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 23.26%;
+        height: 75%;
+        z-index: 1;
+        transform: translate(-50%, -50%);
+        transform-origin: center center;
+        transition: transform 0.45s var(--reveal-ease);
+      }
+
+      .case-phone:hover {
+        z-index: 3;
+        transform: translate(-50%, -50%) scale(1.06);
+      }
+
+      .case-carousel__shot .case-phone,
+      .case-phone--shot {
+        width: 100%;
+        height: 100%;
+      }
+
+      .case-carousel__shot .case-phone:hover {
+        transform: translate(-50%, -50%);
+      }
+
+      .case-phone__bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        pointer-events: none;
+      }
+
+      .case-phone__screen {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 91.5%;
+        height: 96.6%;
+        transform: translate(-50%, -50%);
+        border-radius: 38px;
+        overflow: hidden;
+      }
+
+      .case-phone__screen img,
+      .case-phone__video {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+      }
+
+      .case-media__labels {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .case-media__label {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-family: var(--font-headline);
+        font-stretch: extra-condensed;
+        font-style: italic;
+        font-weight: 500;
+        font-size: 18px;
+        color: var(--color-white);
+        white-space: nowrap;
+      }
+
+      .case-media__label--left {
+        left: 16.18%;
+      }
+
+      .case-media__label--right {
+        right: 16.18%;
+      }
+
+      .case-media__entry-photo {
+        position: absolute;
+        left: -5.45%;
+        top: -54.67%;
+        width: 110.91%;
+        height: 226.67%;
+        object-fit: cover;
+      }
+
+      .case-media__entry-note {
+        position: absolute;
+        top: 26px;
+        right: 83px;
+        font-size: 12px;
+        color: var(--color-white);
+        opacity: 0.5;
+        margin: 0;
+      }
+
+      .case-media__thanks {
+        display: block;
+        width: 100%;
+        max-width: var(--case-media);
+        height: auto;
+        border-radius: 30px;
+      }
+
+      .case-rec {
+        max-width: var(--case-content);
+        margin: var(--case-rec-gap) auto 0;
+        padding: 40px 48px;
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border-radius: 30px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.09);
+      }
+
+      .case-rec__item {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 360px;
+        max-width: 100%;
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+        transition: transform 0.4s var(--reveal-ease);
+      }
+
+      .case-rec__item:hover,
+      .case-rec__item:focus-visible {
+        transform: translateY(-10px);
+      }
+
+      .case-rec__cover {
+        width: 100%;
+        height: 300px;
+        border-radius: 34px;
+        overflow: hidden;
+      }
+
+      .case-rec__cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .case-rec__caption {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 500;
+        line-height: normal;
+        letter-spacing: -0.6px;
+        text-transform: uppercase;
+        color: var(--color-text);
+      }
+
+      .case-rec__caption--muted {
+        color: rgba(54, 54, 54, 0.5);
+      }
+
+      .footer {
+        max-width: var(--container);
+        margin: 0 auto;
+        padding: 120px var(--nav-pad-x) 120px;
+        display: flex;
+        flex-direction: column;
+        gap: 97px;
+      }
+
+      .footer__title {
+        margin: 0;
+        font-family: var(--font-headline);
+        font-stretch: extra-condensed;
+        font-style: italic;
+        font-weight: 500;
+        font-size: clamp(72px, 14vw, 180px);
+        line-height: 1;
+        letter-spacing: -0.05em;
+        background: linear-gradient(180deg, #363636 0%, #5e5c5c 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        width: 100%;
+      }
+
+      .footer__bar {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 38px;
+        width: 100%;
+      }
+
+      .footer__info {
+        display: flex;
+        flex: 1 1 auto;
+        gap: 75px;
+        align-items: flex-start;
+        min-width: 0;
+      }
+
+      .footer__col {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+      }
+
+      .footer__name,
+      .footer__email {
+        margin: 0;
+        font-family: var(--font-body);
+        font-weight: 400;
+        font-size: 28px;
+        line-height: 1;
+        letter-spacing: -0.05em;
+        color: var(--color-text);
+      }
+
+      .footer__name {
+        text-transform: uppercase;
+      }
+
+      .footer__email {
+        border: none;
+        background: none;
+        padding: 0;
+        cursor: pointer;
+        text-align: left;
+      }
+
+      .footer__meta {
+        margin: 0;
+        font-family: var(--font-body);
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 1;
+        letter-spacing: -0.05em;
+        color: #9b9b9b;
+      }
+
+      .footer__meta--email {
+        text-transform: lowercase;
+      }
+
+      .footer__copy-note {
+        margin: 0;
+        font-family: var(--font-body);
+        font-size: 14px;
+        line-height: 1;
+        color: #2f80ed;
+        opacity: 0;
+        transition: opacity 0.25s ease;
+      }
+
+      .footer__copy-note.is-visible {
+        opacity: 1;
+      }
+
+      .footer__links {
+        flex: 0 0 371px;
+        max-width: 100%;
+        justify-content: flex-end;
+      }
+
+      .js-reveal {
+        opacity: 0;
+        transform: translateY(var(--reveal-shift));
+        transition:
+          opacity var(--reveal-duration) var(--reveal-ease),
+          transform var(--reveal-duration) var(--reveal-ease);
+      }
+
+      .js-reveal.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        .js-reveal,
+        .case-phones__item,
+        .case-accordion__teaser,
+        .case-accordion__panel {
+          grid-template-rows: 1fr !important;
+          transition: none !important;
+        }
+
+        .case-accordion__media-slot {
+          display: block !important;
+        }
+
+        .case-accordion__media img {
+          opacity: 1 !important;
+          transform: none !important;
+          transition: none !important;
+        }
+
+        .case-accordion__image {
+          opacity: 1 !important;
+          transform: translate(-50%, -50%) !important;
+          transition: none !important;
+        }
+
+        .case-accordion__image:hover {
+          transform: translate(-50%, -50%) !important;
+        }
+
+        .case-accordion__item:not(.is-open) .case-accordion__panel,
+        .case-accordion__item:not(.is-open) .case-accordion__media-slot {
+          display: none;
+        }
+
+        .case-accordion__item.is-open .case-accordion__teaser {
+          display: none;
+        }
+
+        .case-phones__item--2 {
+          transform: translateX(-50%);
+        }
+
+        .case-phones__item:hover,
+        .case-phones__item--2:hover,
+        .case-phone:hover,
+        .case-rec__item:hover {
+          transform: none;
+        }
+
+        .case-phone:hover {
+          transform: translate(-50%, -50%);
+        }
+      }
+
+      @media (max-width: 900px) {
+        :root {
+          --nav-pad-x: 24px;
+          --header-offset: 88px;
+          --reveal-shift: 20px;
+          --case-gap: 40px;
+        }
+
+        .case-intro {
+          padding: 0 24px;
+        }
+
+        .case-media {
+          padding: 0 24px;
+        }
+
+        .case-media__frame--phones {
+          height: min(450px, 70vw);
+        }
+
+        .case-media__frame--tall {
+          height: min(700px, 120vw);
+        }
+
+        .case-carousel--tall,
+        .case-carousel--short {
+          flex-direction: column;
+          height: auto;
+        }
+
+        .case-carousel__col {
+          min-height: 400px;
+          flex: 1 1 auto;
+        }
+
+        .case-carousel--short .case-carousel__col {
+          min-height: 310px;
+        }
+
+        .case-carousel--short .case-carousel__shot {
+          width: 70.9%;
+          height: 75%;
+        }
+
+        .case-carousel--short .case-carousel__shot--low,
+        .case-carousel--short .case-carousel__shot--high,
+        .case-carousel--short .case-carousel__shot--high-alt {
+          top: 50%;
+        }
+
+        .case-reviews {
+          top: 32px;
+          width: 92%;
+        }
+
+        .case-reviews__item {
+          flex: 1 1 0;
+          width: auto;
+          max-width: none;
+        }
+
+        .case-media__label {
+          display: none;
+        }
+
+        .footer__bar {
+          flex-direction: column;
+        }
+
+        .footer__info {
+          flex-direction: column;
+          gap: 32px;
+        }
+
+        .footer__links {
+          flex-basis: auto;
+          width: 100%;
+          justify-content: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <a class="btn btn--brand" href="../">
+        <span class="btn__inner"><span class="btn__text">Татьяна Андриянова</span></span>
+      </a>
+      <div class="nav__links">
+        <a class="btn" href="https://disk.yandex.ru/i/4BlwQLRkXn8ZWQ" target="_blank" rel="noopener noreferrer">
+          <span class="btn__inner">
+            <span class="btn__text">резюме</span>
+            <span class="btn__sep" aria-hidden="true"></span>
+            <span class="btn__icon" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </span>
+          </span>
+        </a>
+        <a class="btn" href="https://t.me/iiiuuuppp" target="_blank" rel="noopener noreferrer">
+          <span class="btn__inner">
+            <span class="btn__text">тг</span>
+            <span class="btn__sep" aria-hidden="true"></span>
+            <span class="btn__icon" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <div class="page">
+      <div class="page__bg" aria-hidden="true"><div class="page__bg-inner"></div></div>
+      <div class="page__content">
+        <main class="case-page">
+          <header class="case-intro js-reveal" data-reveal-delay="0">
+            <div class="case-intro__top">
+              <a class="btn btn--sm btn--icon" href="../" aria-label="Назад на главную">
+                <span class="btn__inner">
+                  <span class="btn__icon" aria-hidden="true">
+                    <svg width="14" height="12" viewBox="0 0 14 12" fill="none"><path d="M6 1L1 6L6 11M1 6H13" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                  </span>
+                </span>
+              </a>
+              <p class="case-intro__date">ноябрь 2025</p>
+            </div>
+            <div class="case-intro__body">
+              <div class="case-intro__title-block">
+                <h1 class="case-intro__title">AI-флорист</h1>
+                <div class="case-intro__title-row">
+                  <span class="case-intro__title">для</span>
+                  <div class="case-intro__icon" aria-hidden="true">
+                    <div class="case-intro__icon-inner">
+                      <img src="../assets/case-ai/flowwow-icon.png" alt="" width="69" height="69" />
+                    </div>
+                  </div>
+                  <span class="case-intro__title case-intro__title--italic">flowwow</span>
+                </div>
+              </div>
+              <div class="case-intro__desc">
+                <p>Flowwow — маркетплейс цветов и подарков.</p>
+                <p>Просматривая отзывы, я заметила проблему: пользователям сложно выбирать букет. Люди теряются, не понимают различий между вариантами, чувствуют уверенности в выборе.</p>
+                <p>Я предоложила что это может снизить конверсию в заказ<br />и решила поискать решение.</p>
+              </div>
+              <a class="btn btn--sm btn--fit" href="#design-solution">
+                <span class="btn__inner">
+                  <span class="btn__text">сразу к дизайну</span>
+                  <span class="btn__sep" aria-hidden="true"></span>
+                  <span class="btn__icon" aria-hidden="true">
+                    <svg width="11" height="14" viewBox="0 0 11 14" fill="none"><path d="M5.5 1V13M5.5 13L1.5 9M5.5 13L9.5 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                  </span>
+                </span>
+              </a>
+            </div>
+          </header>
+
+          <div class="case-media js-reveal" data-reveal-delay="80">
+            <div class="case-media__frame case-media__frame--phones">
+              <div class="case-phones">
+                <div class="case-phones__item case-phones__item--1"><img src="../assets/case-ai/hero-phone-1.png" alt="Экран AI-флориста — ввод запроса" /></div>
+                <div class="case-phones__item case-phones__item--2"><img src="../assets/case-ai/hero-phone-2.png" alt="Экран AI-флориста — подсказки" /></div>
+                <div class="case-phones__item case-phones__item--3"><img src="../assets/case-ai/hero-phone-3.png" alt="Экран карточки товара с рекомендацией AI" /></div>
+              </div>
+            </div>
+          </div>
+
+          <section class="case-section js-reveal" data-reveal-delay="80">
+            <div class="case-section__group">
+              <p class="case-section__label">Зачем</p>
+              <p class="case-section__text">Пользователи жалуются, что выбор букета сложный и неудобный: трудно сравнивать варианты, и нет уверенности, что выбран подходящий.</p>
+            </div>
+            <div class="case-section__group">
+              <p class="case-section__label">Тогда моя цель</p>
+              <ul class="case-section__text">
+                <li>увеличить конверсию в заказ на 10–15 %</li>
+                <li>повысить возвращаемость на 10–15 %</li>
+              </ul>
+              <p class="case-section__text">За счет улучшения текущего пользовательского опыта</p>
+              <p class="case-section__note">*Так как это концептуальный кейс, метрики являются предположительными и основаны на продуктовой гипотезе</p>
+            </div>
+            <div class="case-section__group">
+              <p class="case-section__label">Гипотеза</p>
+              <p class="case-section__text">Пользователям не хватает ориентиров внутри каталога:</p>
+              <ul class="case-section__text">
+                <li>они видят ассортимент, но не понимают различий</li>
+                <li>не могут быстро оценить, какой букет или подарок лучше подходит<br />под их контекст</li>
+              </ul>
+              <p class="case-section__text">Если создать механику, которая поможет сузить выбор и даст уверенность,<br />то можно упростить процесс выбора на этапе принятия решения.</p>
+            </div>
+          </section>
+
+          <div class="case-media js-reveal" data-reveal-delay="80">
+            <div class="case-media__frame case-media__frame--reviews">
+              <div class="case-reviews">
+                <div class="case-reviews__item case-reviews__item--1"><img src="../assets/case-ai/review-1.png" alt="Отзыв пользователя о неудобном выборе товара" /></div>
+                <div class="case-reviews__item case-reviews__item--2"><img src="../assets/case-ai/review-2.png" alt="Отзыв о скудном фильтре" /></div>
+                <div class="case-reviews__item case-reviews__item--3"><img src="../assets/case-ai/review-3.png" alt="Отзыв о неудобном выборе цветов" /></div>
+              </div>
+            </div>
+          </div>
+
+          <section class="case-section case-section--lg js-reveal" data-reveal-delay="80">
+            <div class="case-section__group">
+              <p class="case-section__label case-section__label--alt">Дискавери</p>
+              <p class="case-section__text">Я провела анализ пользовательского флоу<br /><br />И что бы выяснить, какие критерии выбора важны и сколько усилий люди готовы тратить на поиск подходящего букета, провела количественное и качественное исследование.</p>
+            </div>
+          </section>
+
+          <div class="case-accordion js-reveal" data-reveal-delay="80">
+            <div class="case-accordion__item case-accordion__item--flow" data-accordion>
+              <p class="case-accordion__title">Флоу выбора</p>
+              <div class="case-accordion__teaser">
+                <div class="case-accordion__teaser-inner">
+                  <p class="case-accordion__preview">Перегруженные фильтры, сложная навигация</p>
+                  <button type="button" class="btn btn--sm" data-accordion-open>
+                    <span class="btn__inner">
+                      <span class="btn__text">читать</span>
+                      <span class="btn__sep" aria-hidden="true"></span>
+                      <span class="btn__icon" aria-hidden="true">
+                        <svg width="11" height="14" viewBox="0 0 11 14" fill="none"><path d="M5.5 1V13M5.5 13L1.5 9M5.5 13L9.5 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                      </span>
+                    </span>
+                  </button>
+                </div>
+              </div>
+              <div class="case-accordion__media-slot">
+                <div class="case-accordion__media case-accordion__media--tall">
+                  <div class="case-accordion__image">
+                    <img src="../assets/case-ai/accordion-flow.png" alt="Схема флоу выбора в приложении" width="459" height="512" />
+                  </div>
+                </div>
+              </div>
+              <div class="case-accordion__panel">
+                <div class="case-accordion__panel-inner">
+                  <div class="case-accordion__text">
+                    <p>Фильтры выглядят перегруженными и плохо структурированными вместо упрощения поиска они усиливают когнитивную нагрузку.</p>
+                    <p>Отзывы пользователей подтверждают:</p>
+                    <ul>
+                      <li>выбор кажется неудобным</li>
+                      <li>сложно ориентироваться в категориях и магазинах</li>
+                    </ul>
+                    <p>Вывод: громоздкий процесс выбора может приводить к отказу от покупки.<br />Повышение удобства напрямую влияет на удержание и возвращаемость.<br /><br />Так же в колличественном опросе подтвердилось:<br />Интерфейс flowwow недостаточно помогает сузить выбор</p>
+                  </div>
+                  <button type="button" class="btn btn--sm" data-accordion-close>
+                    <span class="btn__inner">
+                      <span class="btn__text">скрыть</span>
+                      <span class="btn__sep" aria-hidden="true"></span>
+                      <span class="btn__icon" aria-hidden="true">
+                        <svg width="11" height="14" viewBox="0 0 11 14" fill="none"><path d="M5.5 1V13M5.5 13L1.5 9M5.5 13L9.5 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                      </span>
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="case-accordion__item" data-accordion>
+              <p class="case-accordion__title">Опрос и интервью</p>
+              <div class="case-accordion__teaser">
+                <div class="case-accordion__teaser-inner">
+                  <div class="case-accordion__preview">
+                    <p>Пользователи балансируют между:</p>
+                    <ul>
+                      <li>желанием порадовать;</li>
+                      <li>страхом сделать неправильный выбор.</li>
+                    </ul>
+                  </div>
+                  <button type="button" class="btn btn--sm" data-accordion-open>
+                    <span class="btn__inner">
+                      <span class="btn__text">читать</span>
+                      <span class="btn__sep" aria-hidden="true"></span>
+                      <span class="btn__icon" aria-hidden="true">
+                        <svg width="11" height="14" viewBox="0 0 11 14" fill="none"><path d="M5.5 1V13M5.5 13L1.5 9M5.5 13L9.5 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                      </span>
+                    </span>
+                  </button>
+                </div>
+              </div>
+              <div class="case-accordion__panel">
+                <div class="case-accordion__panel-inner">
+                  <div class="case-accordion__text">
+                    <p>Чтобы глубже понять людей, покупающих букеты, и пользователей flowwow,я провела количественное и качественное исследование.</p>
+                    <p>Мне важно было выяснить, какие критерии выбора важны и сколько усилий люди готовы тратить на поиск подходящего букета.</p>
+                    <p>Что интересного я нашла через количественный опросник:</p>
+                    <p>1. Главная боль - это неопределенность и страх ошибки. Люди редко покупают цветы и не имеют устойчивого сценария выбора;</p>
+                    <p>2.Выбор - это попадание в контекст: повод, характер и вкус получателя;</p>
+                    <p>3.Интерфейс flowwwow недостаточно помогает сузить выбор.<br /><br />И что интересного в интервью:</p>
+                    <p>На основе интервью у меня сформировался единый широкий сегмент пользователей, которые выполняют одну работу "выбрать подходящий букет".<br />...Но изначально я нашла только 2 сегмента</p>
+                  </div>
+                </div>
+              </div>
+              <div class="case-accordion__media-slot">
+                <div class="case-accordion__media case-accordion__media--short">
+                  <div class="case-accordion__image">
+                    <img src="../assets/case-ai/accordion-interview.png" alt="Сегменты пользователей" width="459" height="260" />
+                  </div>
+                </div>
+              </div>
+              <div class="case-accordion__panel">
+                <div class="case-accordion__panel-inner">
+                  <div class="case-accordion__text">
+                    <p>Деление на внимательного и практичного дарителя это не жесткие сегменты, а две доминирующие стратегии, которые у реальных людей часто смешиваются.</p>
+                    <p>Рациональные цели и эмоциональные ожидания свободно комбинируются: человек может выбирать вдумчиво и следовать "правилам", а в другой ситуации может торопиться, но всё равно стремиться порадовать. Эти мотивации меняются от случая к случаю.</p>
+                    <p>По сути, пользователи балансируют между двумя базовыми потребностями - угадать и порадовать, не ошибиться и сделать правильно.</p>
+                    <p>Поэтому вместо разделения на сегменты я думала над универсальным решением, которое поддерживает как вдумчивый выбор, так и быструю "безопасную" покупку, давая пользователю уверенность в момент принятия решения.</p>
+                    <p>Кстати респонденты еще говорили что выбирать цветы в магазине приятнее.</p>
+                  </div>
+                  <button type="button" class="btn btn--sm" data-accordion-close>
+                    <span class="btn__inner">
+                      <span class="btn__text">скрыть</span>
+                      <span class="btn__sep" aria-hidden="true"></span>
+                      <span class="btn__icon" aria-hidden="true">
+                        <svg width="11" height="14" viewBox="0 0 11 14" fill="none"><path d="M5.5 1V13M5.5 13L1.5 9M5.5 13L9.5 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                      </span>
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="case-media js-reveal" data-reveal-delay="80">
+            <div class="case-media__frame case-media__frame--research">
+              <img class="case-research-collage" src="../assets/case-ai/research-collage.png" alt="Интервью, опрос и участники исследования" width="1100" height="208" />
+            </div>
+          </div>
+
+          <section class="case-section case-section--lg js-reveal" data-reveal-delay="80">
+            <div class="case-section__group">
+              <p class="case-section__label case-section__label--alt">Результаты дискавери</p>
+              <p class="case-section__text">После дискавери появились идеи, как улучшить процесс выбора букета:</p>
+              <ul class="case-section__text">
+                <li>мини-опрос для подбора букета</li>
+                <li>подбор по настроению и стилю</li>
+                <li>подсказки о значении цветов</li>
+                <li>эмоциональные коллекции</li>
+                <li>опыт выбора, похожий на консультацию в магазине</li>
+              </ul>
+              <p class="case-section__text">Все эти идеи можно объединить в одном решении, в AI-помощнике-флористе</p>
+              <p class="case-section__text">AI позволяет:</p>
+              <ul class="case-section__text">
+                <li>персонализировать рекомендации</li>
+                <li>создать интерактивный консультационный опыт</li>
+                <li>снизить когнитивную нагрузку</li>
+              </ul>
+              <p class="case-section__text">Обычные фильтры не дают такого эффекта</p>
+            </div>
+          </section>
+
+          <div class="case-accordion js-reveal" data-reveal-delay="80">
+            <div class="case-accordion__item" data-accordion>
+              <p class="case-accordion__title">SWOT-анализ AI-помощников и чатов поддержки</p>
+              <div class="case-accordion__teaser">
+                <div class="case-accordion__teaser-inner">
+                  <button type="button" class="btn btn--sm" data-accordion-open>
+                    <span class="btn__inner">
+                      <span class="btn__text">читать</span>
+                      <span class="btn__sep" aria-hidden="true"></span>
+                      <span class="btn__icon" aria-hidden="true">
+                        <svg width="11" height="14" viewBox="0 0 11 14" fill="none"><path d="M5.5 1V13M5.5 13L1.5 9M5.5 13L9.5 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                      </span>
+                    </span>
+                  </button>
+                </div>
+              </div>
+              <div class="case-accordion__panel">
+                <div class="case-accordion__panel-inner">
+                  <div class="case-accordion__text">
+                    <p>Сегодня AI чаще выступает как справочник, а не как помощник принятия решений.<br />В выборе подарка пользователю важнее уверенность, чем информация.<br /><br />AI-Флорист должен:</p>
+                    <ul>
+                      <li>направлять выбор</li>
+                      <li>давать рекомендации</li>
+                      <li>снижать страх ошибки</li>
+                    </ul>
+                  </div>
+                  <a class="btn btn--fit" href="#" aria-label="Смотреть SWOT анализ">
+                    <span class="btn__inner">
+                      <span class="btn__text">смотреть SWOT анализ</span>
+                      <span class="btn__sep" aria-hidden="true"></span>
+                      <span class="btn__icon" aria-hidden="true">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                      </span>
+                    </span>
+                  </a>
+                </div>
+              </div>
+              <div class="case-accordion__media-slot">
+                <div class="case-accordion__media case-accordion__media--short case-accordion__media--wide">
+                  <div class="case-accordion__image">
+                    <img src="../assets/case-ai/accordion-swot.png" alt="SWOT-анализ AI-помощников" width="569" height="278" />
+                  </div>
+                </div>
+              </div>
+              <div class="case-accordion__panel case-accordion__panel--tail">
+                <div class="case-accordion__panel-inner">
+                  <button type="button" class="btn btn--sm" data-accordion-close>
+                    <span class="btn__inner">
+                      <span class="btn__text">скрыть</span>
+                      <span class="btn__sep" aria-hidden="true"></span>
+                      <span class="btn__icon" aria-hidden="true">
+                        <svg width="11" height="14" viewBox="0 0 11 14" fill="none"><path d="M5.5 1V13M5.5 13L1.5 9M5.5 13L9.5 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                      </span>
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="case-section case-section--lg js-reveal" id="design-solution" data-reveal-delay="80">
+            <div class="case-section__row">
+              <p class="case-section__label case-section__label--alt" style="margin: 0">Дизайн решение</p>
+              <a class="btn" href="https://www.figma.com/design/suJUhMprnYiuIR6WgBvGdP/%D0%9C%D0%BE%D1%91-%D0%BF%D0%BE%D1%80%D1%82%D1%84%D0%BE%D0%BB%D0%B8%D0%BE?node-id=441-2500" target="_blank" rel="noopener noreferrer">
+                <span class="btn__inner">
+                  <span class="btn__text">смотреть фигму</span>
+                  <span class="btn__sep" aria-hidden="true"></span>
+                  <span class="btn__icon" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                  </span>
+                </span>
+              </a>
+            </div>
+          </div>
+
+          <div class="case-media js-reveal" data-reveal-delay="80">
+            <div class="case-media__frame case-media__frame--tall">
+              <div class="case-phone" style="width: 23.26%; height: 75%">
+                <img class="case-phone__bg" src="../assets/case-ai/phone-bg-1.png" alt="" />
+                <div class="case-phone__screen">
+                  <video
+                    class="case-phone__video"
+                    src="../assets/case-ai/main-screen.mp4"
+                    poster="../assets/case-ai/video-1.png"
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    preload="auto"
+                    aria-label="Главный экран AI-флориста"
+                  ></video>
+                </div>
+              </div>
+              <div class="case-media__labels">
+                <span class="case-media__label case-media__label--left">AI-флорист</span>
+                <span class="case-media__label case-media__label--right">для Flowwow</span>
+              </div>
+            </div>
+          </div>
+
+          <section class="case-section case-section--lg js-reveal" data-reveal-delay="80">
+            <div class="case-section__group">
+              <p class="case-section__label case-section__label--alt">Главная</p>
+              <ul class="case-section__text">
+                <li>Простая и дружелюбная точка входа в диалог</li>
+                <li>Сразу показала, чем может помочь AI-Флорист</li>
+                <li>Персонаж это общение с живым консультантом</li>
+              </ul>
+            </div>
+          </section>
+
+          <div class="case-media js-reveal" data-reveal-delay="80">
+            <div class="case-carousel case-carousel--tall">
+              <div class="case-carousel__col">
+                <div class="case-carousel__shot">
+                  <img src="../assets/case-ai/design-1.png" alt="Экран «Что ты умеешь?»" />
+                </div>
+              </div>
+              <div class="case-carousel__col">
+                <div class="case-carousel__shot">
+                  <div class="case-phone case-phone--shot">
+                    <img class="case-phone__bg" src="../assets/case-ai/phone-bg-1.png" alt="" />
+                    <div class="case-phone__screen">
+                      <video
+                        class="case-phone__video"
+                        src="../assets/case-ai/request.mp4"
+                        poster="../assets/case-ai/video-2.png"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        preload="auto"
+                        aria-label="Главный экран с подсказками"
+                      ></video>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="case-carousel__col">
+                <div class="case-carousel__shot">
+                  <img src="../assets/case-ai/design-2.png" alt="Экран с рекомендацией букета" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <section class="case-section case-section--lg js-reveal" data-reveal-delay="80">
+            <div class="case-section__group">
+              <p class="case-section__label case-section__label--alt">Ответ AI</p>
+              <ul class="case-section__text">
+                <li>Чипсы при вводе запроса помогают сформулировать запрос подробнее</li>
+                <li>AI-Флорист анализирует повод, характер получателя и пожелания</li>
+                <li>Предлагает 3 варианта букетов</li>
+                <li>Объясняет, почему именно этот букет</li>
+                <li>Один вариант приоритетный</li>
+              </ul>
+            </div>
+          </section>
+
+          <div class="case-media js-reveal" data-reveal-delay="80">
+            <div class="case-carousel case-carousel--tall">
+              <div class="case-carousel__col">
+                <div class="case-carousel__shot">
+                  <img src="../assets/case-ai/ai-response-1.png" alt="Диалог с AI-флористом" />
+                </div>
+              </div>
+              <div class="case-carousel__col">
+                <div class="case-carousel__shot">
+                  <img src="../assets/case-ai/ai-response-2.png" alt="Уточнение запроса" />
+                </div>
+              </div>
+              <div class="case-carousel__col">
+                <div class="case-carousel__shot">
+                  <img src="../assets/case-ai/ai-response-3.png" alt="Рекомендация подарка" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <section class="case-section case-section--lg js-reveal" data-reveal-delay="80">
+            <p class="case-section__text">Реплики AI-Флориста писал чат гпт, он в этом лучше понимает</p>
+          </section>
+
+          <div class="case-media js-reveal" data-reveal-delay="80">
+            <div class="case-media__frame case-media__frame--tall">
+              <div class="case-phone" style="width: 23.26%; height: 75%">
+                <img class="case-phone__bg" src="../assets/case-ai/phone-bg-3.png" alt="" />
+                <div class="case-phone__screen">
+                  <video
+                    class="case-phone__video"
+                    src="../assets/case-ai/onboarding.mp4"
+                    poster="../assets/case-ai/video-3.png"
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    preload="auto"
+                    aria-label="Онбординг AI-флориста"
+                  ></video>
+                </div>
+              </div>
+              <div class="case-media__labels">
+                <span class="case-media__label case-media__label--left">AI-флорист</span>
+                <span class="case-media__label case-media__label--right">для Flowwow</span>
+              </div>
+            </div>
+          </div>
+
+          <section class="case-section case-section--lg js-reveal" data-reveal-delay="80">
+            <div class="case-section__group">
+              <p class="case-section__label case-section__label--alt">Онбординг</p>
+              <p class="case-section__text">Цель не обучить, а заинтересовать и перевести пользователя в диалог</p>
+            </div>
+          </section>
+
+          <div class="case-media js-reveal" data-reveal-delay="80">
+            <div class="case-carousel case-carousel--short">
+              <div class="case-carousel__col">
+                <div class="case-carousel__shot case-carousel__shot--low">
+                  <img src="../assets/case-ai/entry-1.png" alt="Поиск с баннером AI-флориста" />
+                </div>
+              </div>
+              <div class="case-carousel__col">
+                <div class="case-carousel__shot case-carousel__shot--high">
+                  <div class="case-phone case-phone--shot">
+                    <img class="case-phone__bg" src="../assets/case-ai/phone-bg-2.png" alt="" />
+                    <div class="case-phone__screen">
+                      <video
+                        class="case-phone__video"
+                        src="../assets/case-ai/entry-point.mp4"
+                        poster="../assets/case-ai/entry-video.png"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        preload="auto"
+                        aria-label="Точка входа в нижнем меню"
+                      ></video>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="case-carousel__col">
+                <div class="case-carousel__shot case-carousel__shot--high-alt">
+                  <img src="../assets/case-ai/entry-3.png" alt="Карточка товара с AI-рекомендацией" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <section class="case-section case-section--lg js-reveal" data-reveal-delay="80">
+            <div class="case-section__group">
+              <p class="case-section__label case-section__label--alt">Точки входа</p>
+              <p class="case-section__text">Основная точка входа - в нижнем меню, всегда в быстром доступе.</p>
+              <p class="case-section__text">А так же при поиске, есть баннер предлагающий помочь выбрать,<br />он переводит к флористу.</p>
+              <p class="case-section__text">Так же флорист поджидает юзера в карточке товара, давая свою краткую характеритику к букетику или другому подарку.</p>
+            </div>
+          </section>
+
+          <div class="case-media js-reveal" data-reveal-delay="80">
+            <div class="case-media__frame case-media__frame--entry">
+              <img class="case-media__entry-photo" src="../assets/case-ai/entry-points-photo.png" alt="Пользователь с приложением AI-флорист" />
+              <p class="case-media__entry-note">*иишка</p>
+            </div>
+          </div>
+
+          <section class="case-section case-section--lg js-reveal" data-reveal-delay="80">
+            <div class="case-section__group">
+              <p class="case-section__label case-section__label--alt">Проверка дизайна</p>
+              <p class="case-section__text">Я провела быстрые UX-тесты на людях из своего окружения<br />Все участники сразу понимали, как начать диалог и понимали результаты ответа.</p>
+            </div>
+            <div class="case-section__group">
+              <p class="case-section__label case-section__label--alt">Если бы решение внедрялось в продукт я бы проверяла</p>
+              <p class="case-section__text">Основные метрики:</p>
+              <ul class="case-section__text">
+                <li>конверсию из диалога в заказ</li>
+                <li>конверсию в заказ у пользователей с AI и без</li>
+                <li>время до оформления заказа повторные покупки</li>
+              </ul>
+              <p class="case-section__text">Методы:</p>
+              <ul class="case-section__text">
+                <li>A/B-тест: каталог и AI-Флорист</li>
+                <li>анализ поведения пользователей в диалоге</li>
+                <li>опросы об уверенности в выборе</li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="case-section case-section--lg js-reveal" data-reveal-delay="80">
+            <div class="case-section__group">
+              <p class="case-section__label case-section__label--alt">Если бы проект развивался как реальный продукт,<br />следующим шагом я бы</p>
+              <ul class="case-section__text">
+                <li>провела полноценные UX-тесты с целевой аудиторией,</li>
+                <li>протестировала разные сценарии диалога,</li>
+                <li>проверила влияние AI-Флориста на конверсию через A/B-тест</li>
+                <li>возможно добавила дополнительные точки входа,<br />в местах где это было бы органично для пользователя</li>
+              </ul>
+            </div>
+          </section>
+
+          <div class="case-media js-reveal" data-reveal-delay="80">
+            <img class="case-media__thanks" src="../assets/case-ai/thanks-banner.png" alt="Спасибо за внимание" width="1100" height="283" />
+          </div>
+        </main>
+
+        <section class="case-rec js-reveal" data-reveal-delay="80" aria-label="Другие кейсы">
+          <a class="case-rec__item" href="#">
+            <div class="case-rec__cover"><img src="../assets/case-ai/rec-1.png" alt="" /></div>
+            <p class="case-rec__caption"><span class="case-rec__caption--muted">Как мы создаем </span>сервис<br />по учету финансов<br />для малого бизнеса</p>
+          </a>
+          <a class="case-rec__item" href="#">
+            <div class="case-rec__cover"><img src="../assets/case-ai/rec-2.png" alt="" /></div>
+            <p class="case-rec__caption">ВК Маркет: как мы нашли точку роста в механике вишлистов</p>
+          </a>
+          <a class="case-rec__item" href="../case-concepts/" data-node-id="441:3514">
+            <div class="case-rec__cover"><img src="../assets/case-ai/rec-3.png" alt="" /></div>
+            <p class="case-rec__caption">Концептики и шотики</p>
+          </a>
+        </section>
+
+        <footer class="footer">
+          <h2 class="footer__title js-reveal" data-reveal-delay="0">Давайте знакомиться?</h2>
+          <div class="footer__bar js-reveal" data-reveal-delay="80">
+            <div class="footer__info">
+              <div class="footer__col">
+                <p class="footer__name">Татьяна</p>
+                <p class="footer__meta">я в Москве</p>
+              </div>
+              <div class="footer__col">
+                <button class="footer__email" type="button" id="copy-email-btn" data-email="a34203462@gmail.com">a34203462@gmail.com</button>
+                <p class="footer__meta footer__meta--email">мой email</p>
+                <p class="footer__copy-note" id="copy-email-note" role="status" aria-live="polite">Скопировано!</p>
+              </div>
+            </div>
+            <div class="footer__links nav__links">
+              <a class="btn" href="https://disk.yandex.ru/i/4BlwQLRkXn8ZWQ" target="_blank" rel="noopener noreferrer">
+                <span class="btn__inner">
+                  <span class="btn__text">резюме</span>
+                  <span class="btn__sep" aria-hidden="true"></span>
+                  <span class="btn__icon" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                  </span>
+                </span>
+              </a>
+              <a class="btn" href="https://t.me/iiiuuuppp" target="_blank" rel="noopener noreferrer">
+                <span class="btn__inner">
+                  <span class="btn__text">тг</span>
+                  <span class="btn__sep" aria-hidden="true"></span>
+                  <span class="btn__icon" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                  </span>
+                </span>
+              </a>
+              <a class="btn" href="https://www.linkedin.com/in/tatyana-andriyanova-a01375347" target="_blank" rel="noopener noreferrer">
+                <span class="btn__inner">
+                  <span class="btn__text">линкедин</span>
+                  <span class="btn__sep" aria-hidden="true"></span>
+                  <span class="btn__icon" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                  </span>
+                </span>
+              </a>
+              <a class="btn" href="https://t.me/iiiuuuppprisynki" target="_blank" rel="noopener noreferrer">
+                <span class="btn__inner">
+                  <span class="btn__text">тгк</span>
+                  <span class="btn__sep" aria-hidden="true"></span>
+                  <span class="btn__icon" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                  </span>
+                </span>
+              </a>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        function scheduleReveal(el) {
+          if (el.classList.contains("is-visible")) return;
+          const delay = Number(el.dataset.revealDelay || 0);
+          window.setTimeout(() => el.classList.add("is-visible"), delay);
+        }
+
+        function initReveals() {
+          const reveals = document.querySelectorAll(".js-reveal");
+          if (!reveals.length) return;
+          if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            reveals.forEach((el) => el.classList.add("is-visible"));
+            return;
+          }
+          Array.from(reveals).slice(0, 2).forEach((el) => scheduleReveal(el));
+          const io = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                scheduleReveal(entry.target);
+                io.unobserve(entry.target);
+              });
+            },
+            { root: null, threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+          );
+          Array.from(reveals).forEach((el, i) => {
+            if (i < 2) return;
+            io.observe(el);
+          });
+        }
+
+        function getAccordionScrollTop(item) {
+          const headerOffset =
+            parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--header-offset")) || 80;
+          const scrollGap =
+            parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--accordion-scroll-gap")) || 24;
+          const rect = item.getBoundingClientRect();
+          return Math.max(0, window.scrollY + rect.top - headerOffset - scrollGap);
+        }
+
+        function trackAccordionScroll(item, duration) {
+          const startTime = performance.now();
+          const tick = (now) => {
+            window.scrollTo(0, getAccordionScrollTop(item));
+            if (now - startTime < duration) {
+              requestAnimationFrame(tick);
+            }
+          };
+          window.scrollTo(0, getAccordionScrollTop(item));
+          requestAnimationFrame(tick);
+        }
+
+        function initAccordions() {
+          const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          const openDuration = 550;
+          const closeDuration = 950;
+
+          document.querySelectorAll("[data-accordion]").forEach((item) => {
+            const panels = item.querySelectorAll(".case-accordion__panel");
+            const panel = panels[panels.length - 1];
+            const openBtn = item.querySelector("[data-accordion-open]");
+            const closeBtn = item.querySelector("[data-accordion-close]");
+            if (!panel) return;
+
+            const open = () => {
+              if (item.classList.contains("is-open") || item.dataset.accordionBusy === "1") return;
+              item.dataset.accordionBusy = "1";
+              item.classList.remove("is-closing");
+              item.classList.add("is-open");
+
+              if (!reducedMotion) {
+                trackAccordionScroll(item, openDuration);
+              } else {
+                window.scrollTo(0, getAccordionScrollTop(item));
+              }
+
+              panel.addEventListener(
+                "transitionend",
+                () => {
+                  item.dataset.accordionBusy = "0";
+                  syncPageBgHeight();
+                },
+                { once: true }
+              );
+            };
+
+            const close = () => {
+              if (!item.classList.contains("is-open") || item.dataset.accordionBusy === "1") return;
+              item.dataset.accordionBusy = "1";
+              item.classList.add("is-closing");
+              item.classList.remove("is-open");
+
+              if (!reducedMotion) {
+                trackAccordionScroll(item, closeDuration);
+              } else {
+                window.scrollTo(0, getAccordionScrollTop(item));
+              }
+
+              panel.addEventListener(
+                "transitionend",
+                () => {
+                  item.classList.remove("is-closing");
+                  item.dataset.accordionBusy = "0";
+                  syncPageBgHeight();
+                },
+                { once: true }
+              );
+            };
+
+            openBtn?.addEventListener("click", open);
+            closeBtn?.addEventListener("click", close);
+          });
+        }
+
+        function initSmoothAnchors() {
+          document.querySelectorAll('a[href^="#"]').forEach((link) => {
+            link.addEventListener("click", (event) => {
+              const hash = link.getAttribute("href");
+              if (!hash || hash === "#") return;
+              const target = document.querySelector(hash);
+              if (!target) return;
+              event.preventDefault();
+              const offset = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--header-offset")) || 80;
+              const top = target.getBoundingClientRect().top + window.scrollY - offset - 24;
+              window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+            });
+          });
+        }
+
+        function initEmailCopy() {
+          const btn = document.getElementById("copy-email-btn");
+          const note = document.getElementById("copy-email-note");
+          if (!btn || !note) return;
+          let hideTimer;
+          btn.addEventListener("click", async () => {
+            const email = btn.dataset.email || btn.textContent.trim();
+            try {
+              await navigator.clipboard.writeText(email);
+            } catch {
+              const area = document.createElement("textarea");
+              area.value = email;
+              area.setAttribute("readonly", "");
+              area.style.position = "fixed";
+              area.style.left = "-9999px";
+              document.body.appendChild(area);
+              area.select();
+              document.execCommand("copy");
+              document.body.removeChild(area);
+            }
+            note.classList.add("is-visible");
+            window.clearTimeout(hideTimer);
+            hideTimer = window.setTimeout(() => note.classList.remove("is-visible"), 2000);
+          });
+        }
+
+        function syncPageBgHeight() {
+          const page = document.querySelector(".page");
+          const bg = document.querySelector(".page__bg");
+          const inner = document.querySelector(".page__bg-inner");
+          if (!page || !bg || !inner) return;
+          const h = page.offsetHeight;
+          bg.style.height = `${h}px`;
+          inner.style.minHeight = `${h}px`;
+        }
+
+        function initNavAutoHide() {
+          const nav = document.querySelector(".nav");
+          if (!nav) return;
+          let lastY = window.scrollY;
+          let ticking = false;
+          const update = () => {
+            const y = window.scrollY;
+            if (y < 24) nav.classList.remove("is-hidden");
+            else if (y > lastY + 4) nav.classList.add("is-hidden");
+            else if (y < lastY - 4) nav.classList.remove("is-hidden");
+            lastY = y;
+            ticking = false;
+          };
+          window.addEventListener("scroll", () => {
+            if (ticking) return;
+            ticking = true;
+            window.requestAnimationFrame(update);
+          }, { passive: true });
+        }
+
+        function initPhoneVideos() {
+          const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          document.querySelectorAll(".case-phone__video").forEach((video) => {
+            if (reducedMotion) {
+              video.pause();
+              video.removeAttribute("autoplay");
+              return;
+            }
+            const play = () => video.play().catch(() => {});
+            if (video.readyState >= 2) play();
+            else video.addEventListener("loadeddata", play, { once: true });
+          });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+          initReveals();
+          initAccordions();
+          initSmoothAnchors();
+          initNavAutoHide();
+          initEmailCopy();
+          initPhoneVideos();
+          syncPageBgHeight();
+          window.addEventListener("resize", syncPageBgHeight);
+          window.addEventListener("load", syncPageBgHeight);
+        });
+      })();
+    </script>
+  </body>
+</html>
