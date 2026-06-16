@@ -3,6 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="canonical" href="https://tatyana-andriyanova.ru/" />
+    <script>
+      (function () {
+        if (!/index\.html$/i.test(location.pathname)) return;
+        var clean = location.pathname.replace(/\/?index\.html$/i, "/");
+        history.replaceState(null, "", clean + location.search + location.hash);
+      })();
+    </script>
     <title>Моё портфолио</title>
     <link rel="icon" type="image/png" href="assets/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -1476,7 +1484,7 @@
     </div>
 
     <header class="nav" data-node-id="441:1564">
-      <a class="btn btn--brand" href="./">
+      <a class="btn btn--brand" href="/">
         <span class="btn__inner"><span class="btn__text">Татьяна Андриянова</span></span>
       </a>
       <div class="nav__links" data-node-id="441:1566">
