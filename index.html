@@ -42,11 +42,21 @@
         --nav-pad-x: 100px;
         --header-offset: 80px;
         --font-headline: "Noto Serif", serif;
+        --font-headline-wdth: 62.5;
+        --font-headline-tracking: -0.05em;
         --font-body: "Google Sans Code", monospace;
         --reveal-duration: 0.65s;
         --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
         --reveal-shift: 28px;
         --bg-pattern-width: 1700px;
+      }
+
+      .hero__title,
+      .about__title,
+      .footer__title,
+      .mobile-stub__title {
+        font-variation-settings: "wdth" var(--font-headline-wdth);
+        font-stretch: 62.5%;
       }
 
       *,
@@ -387,7 +397,7 @@
         font-weight: 500;
         font-size: 58px;
         line-height: 1;
-        letter-spacing: -2.9px;
+        letter-spacing: var(--font-headline-tracking);
         color: var(--color-text);
         text-align: center;
       }
@@ -790,7 +800,7 @@
         font-weight: 500;
         font-size: 58px;
         line-height: 1;
-        letter-spacing: -2.9px;
+        letter-spacing: var(--font-headline-tracking);
         color: var(--color-text);
         text-align: center;
         white-space: nowrap;
@@ -1216,7 +1226,7 @@
         font-weight: 500;
         font-size: 58px;
         line-height: 1;
-        letter-spacing: -2.9px;
+        letter-spacing: var(--font-headline-tracking);
         color: var(--color-text);
       }
 
