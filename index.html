@@ -452,6 +452,163 @@
         display: inline;
       }
 
+      /* Realty case — 1701:61589 */
+      .realty-card {
+        position: relative;
+        height: 345px;
+        overflow: hidden;
+        border-radius: 34px;
+        isolation: isolate;
+      }
+
+      .realty-card__background,
+      .realty-card__background::after {
+        position: absolute;
+        inset: 0;
+      }
+
+      .realty-card__background img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .realty-card__background::after {
+        content: "";
+        background: #f8f7f8;
+      }
+
+      .realty-card__glow {
+        position: absolute;
+        left: calc(50% - 597.2px);
+        top: -178.2px;
+      }
+
+      .realty-card__logo {
+        position: absolute;
+        top: 31px;
+        left: 31px;
+        width: 177.6px;
+        height: 24px;
+      }
+
+      .realty-card__logo img {
+        position: absolute;
+        display: block;
+      }
+
+      .realty-card__logo-circle {
+        left: 25.6px;
+        transform: scaleY(-1);
+      }
+
+      .realty-card__logo-house {
+        left: 29.884px;
+        top: 3.2784px;
+      }
+
+      .realty-card__logo-wordmark {
+        left: 56px;
+        top: 4px;
+      }
+
+      .realty-card__phone {
+        position: absolute;
+        width: 255.838px;
+        height: 525px;
+      }
+
+      .realty-card__phone--back {
+        left: calc(50% + 109px);
+        top: 65px;
+      }
+
+      .realty-card__phone--front {
+        left: calc(50% - 59px);
+        top: 144px;
+      }
+
+      .realty-card__phone-frame {
+        display: block;
+        width: 255.838px;
+        height: 525px;
+        object-fit: cover;
+      }
+
+      .realty-card__screen {
+        position: absolute;
+        overflow: hidden;
+      }
+
+      .realty-card__phone--back .realty-card__screen {
+        left: 13px;
+        top: 10px;
+        width: 231px;
+        height: 486px;
+        border-radius: 33px;
+      }
+
+      .realty-card__phone--back .realty-card__screen img {
+        position: absolute;
+        top: 0.02%;
+        width: 100%;
+        height: 103.03%;
+      }
+
+      .realty-card__phone--front .realty-card__screen {
+        left: 11px;
+        top: 10px;
+        width: 234px;
+        height: 505px;
+        border-radius: 44px;
+      }
+
+      .realty-card__phone--front .realty-card__screen img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .realty-card__blur {
+        position: absolute;
+        left: 11px;
+        top: 10px;
+        width: 234px;
+        border-radius: 36px 35px 0 0;
+        background: rgba(255, 255, 255, 0.5);
+        -webkit-backdrop-filter: blur(6.35px);
+        backdrop-filter: blur(6.35px);
+      }
+
+      .realty-card__phone--back .realty-card__blur {
+        height: 282px;
+      }
+
+      .realty-card__phone--front .realty-card__blur {
+        height: 197px;
+      }
+
+      .realty-card__message {
+        position: absolute;
+        left: 31px;
+        top: 166px;
+        width: 258px;
+        margin: 0;
+        font-size: 20px;
+        font-weight: 500;
+        line-height: normal;
+        text-transform: uppercase;
+        color: rgba(54, 54, 54, 0.84);
+      }
+
+      .case--realty .case__caption {
+        width: 100%;
+        max-width: 1036px;
+        background: var(--color-white);
+      }
+
       /* Cases — 441:1571 */
       .cases {
         max-width: var(--container);
@@ -1560,6 +1717,40 @@
       </section>
 
       <section class="cases" data-node-id="441:1571">
+        <article class="case case--realty js-reveal" data-reveal-delay="160" data-node-id="1701:61589" aria-labelledby="realty-case-title">
+          <div class="realty-card" data-node-id="1701:61590">
+            <div class="realty-card__background" aria-hidden="true">
+              <img src="assets/case-concepts/rec-1.png" alt="" />
+            </div>
+            <img class="realty-card__glow" src="assets/realty/realty-card-glow.svg" alt="" aria-hidden="true" />
+            <div class="realty-card__phone realty-card__phone--back" aria-hidden="true">
+              <img class="realty-card__phone-frame" src="assets/case-ai/hero-phone-2.png" alt="" width="256" height="525" />
+              <div class="realty-card__screen">
+                <img src="assets/realty/realty-screen-back.png" alt="" />
+              </div>
+              <div class="realty-card__blur"></div>
+            </div>
+            <div class="realty-card__phone realty-card__phone--front" aria-hidden="true">
+              <img class="realty-card__phone-frame" src="assets/case-ai/hero-phone-2.png" alt="" width="256" height="525" />
+              <div class="realty-card__screen">
+                <img src="assets/realty/realty-screen-front.png" alt="" />
+              </div>
+              <div class="realty-card__blur"></div>
+            </div>
+            <p class="realty-card__message">Кейс в процессе, расскажу потом...</p>
+            <div class="realty-card__logo" role="img" aria-label="Яндекс Недвижимость">
+              <img class="realty-card__logo-circle" src="assets/realty/realty-logo-circle.svg" alt="" />
+              <img class="realty-card__logo-house" src="assets/realty/realty-logo-house.svg" alt="" />
+              <img class="realty-card__logo-wordmark" src="assets/realty/realty-logo-wordmark.svg" alt="" />
+              <img src="assets/realty/realty-logo-yandex.svg" alt="" />
+            </div>
+          </div>
+          <div class="case__caption">
+            <h2 class="case__caption-line" id="realty-case-title">Развитие продуктов Яндекс Недвижимости</h2>
+            <p class="case__caption-line case__caption--gray">Работала над продуктовыми задачами от исследования пользовательских потребностей и проверки гипотез до проектирования интерфейсов</p>
+          </div>
+        </article>
+
         <article class="case js-reveal" data-reveal-delay="160" data-node-id="441:1572">
           <a class="case__link" href="case-ai-florist/">
             <div class="case__frame">
